@@ -14,8 +14,6 @@ function fkineTrDobot = FkineTrDobot(q,baseTr)
 
 end
 
-
-
 function tr = GetJointToJointTr(q,d,a,alpha,offset)
         tr = trotz(q+offset) * transl([0,0,d]) * transl([a,0,0]) * trotx(alpha);
     end
