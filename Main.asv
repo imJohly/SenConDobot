@@ -73,8 +73,8 @@ vertices = 1; %array of block vertices
 steps = 50;
 zGripperOffset = 0.03;
 
-% need a block array that updates - ID of the block objects
-% need a vertices array that updates - Poistion of the block
+% need a block array that updates
+% need 
 
 for i = 1:1
 
