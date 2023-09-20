@@ -20,6 +20,8 @@ bluePlace = transl(-0.1,0.25,0);
 floor = surf([-0.35,-0.35;0.45,0.45] ,[-0.45,0.45;-0.45,0.45] ,[0,0;0,0] ...
 ,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
 
+
+
 rotate(floor,[0,0,1],180);
 
 %% My Dobot
