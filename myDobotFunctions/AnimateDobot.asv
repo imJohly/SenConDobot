@@ -6,10 +6,10 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
 
     %% Need to include
     
-    %baseTr
-    %i
-    %vertices
-    %can
+    %baseTr             % position of base
+    %i                  % to be used when in a for looop
+    %vertices           % block object
+    %block                % which block is being moved
     %steps
     %zGripperOffset
     

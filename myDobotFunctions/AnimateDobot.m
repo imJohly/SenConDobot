@@ -6,25 +6,15 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
 
     %% Need to include
     
-    %baseTr
-    %i
-    %vertices
-    %can
-    %steps
-    %zGripperOffset
-    
-    
-    %% Varagin inputs:
-    
-    %target
-    %guess
-    %q2
-    %adjustment
-    %offset
-    %canCarry
-    %gripperQuery
+    %baseTr                 % position of base
+    %i                      % to be used when in a for looop
+    %vertices               % block object
+    %block                  % which block is being moved
+    %steps                  % number of steps in animation
+    %zGripperOffset         % how far above block end effector stops to allow for gripper
 
-    %% Default values and assign value
+
+    %% Varagin Inputs - Default values and assign value
 
     %Sets default values of optional inputs:
 
