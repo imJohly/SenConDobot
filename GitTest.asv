@@ -16,17 +16,16 @@ plot3(pickPosition(1,4),pickPosition(2,4),pickPosition(3,4),'r.');
 
 bluePlace = transl(-0.1,0.25,0);
 
-
-floor = surf([-0.5,-0.5;0.5,0.5] ,[-0.5,0.5;-0.5,0.5] ,[0,0;0,0] ...
+surf([-1.7,-1.7;1.8,1.8] ,[-1.8,2.5;-1.8,2.5] ,[0,-1.0;-1.0,-1.0] ...
 ,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
 
-rotate(floor,[0,0,1],180);
+
 
 %% My Dobot
 realQ = [0,pi/4,pi/4,0,0];
 Dobot.base = transl(0,0,0) * rpy2tr(0,0,0);
 Dobot.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
-lighting none;
+
 axis([-0.5,0.5,-0.5,0.5,-0.2,0.5])
 
 q = Dobot.getpos;
@@ -37,7 +36,6 @@ for i = 1:STEPS
     Dobot.animate(Qmatrix(i,:));
     %pause(0.05)
 end
-
 VolumePC(Dobot)
 % q = Dobot.ikcon(bluePlace,Dobot.getpos);
 % Qmatrix = jtraj(Dobot.getpos,q,STEPS);
