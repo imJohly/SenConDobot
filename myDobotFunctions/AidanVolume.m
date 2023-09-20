@@ -1,4 +1,4 @@
-function [volume] = VolumePC(robot)
+function [volume] = AidanVolume(robot)
     %profile clear;
     %profile on;
     

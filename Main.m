@@ -38,7 +38,7 @@ for i = 1:STEPS
     %pause(0.05)
 end
 
-VolumePC(Dobot)
+AidanVolume(Dobot)
 % q = Dobot.ikcon(bluePlace,Dobot.getpos);
 % Qmatrix = jtraj(Dobot.getpos,q,STEPS);
 % for i = 1:STEPS
