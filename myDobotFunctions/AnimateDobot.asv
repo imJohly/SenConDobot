@@ -6,10 +6,10 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
 
     %% Need to include
     
-    %baseTr
-    %i
-    %vertices
-    %can
+    %baseTr             % position of base
+    %i                  % to be used when in a for looop
+    %vertices           % block object
+    %block                % which block is being moved
     %steps
     %zGripperOffset
     
@@ -94,8 +94,15 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
     qMatrix = InterpolatedJointAngles(q1,q2,steps);
 
 
+    % Animates through the qMatrix:
+
     for trajStep = 1:steps
+
+        % Moves the can if specified
+
         myRobot.model.animate(qMatrix(trajStep,:));
+
+            %if block carry is set to 1, move the block as well
      
             if blockCarry == 1
                 trNew = FkineTrDobot((qMatrix(trajStep,:)),baseTr);       

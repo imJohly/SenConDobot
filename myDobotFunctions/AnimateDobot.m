@@ -6,25 +6,15 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
 
     %% Need to include
     
-    %baseTr
-    %i
-    %vertices
-    %can
-    %steps
-    %zGripperOffset
-    
-    
-    %% Varagin inputs:
-    
-    %target
-    %guess
-    %q2
-    %adjustment
-    %offset
-    %canCarry
-    %gripperQuery
+    %baseTr                 % position of base
+    %i                      % to be used when in a for looop
+    %vertices               % block object
+    %block                  % which block is being moved
+    %steps                  % number of steps in animation
+    %zGripperOffset         % how far above block end effector stops to allow for gripper
 
-    %% Default values and assign value
+
+    %% Varagin Inputs - Default values and assign value
 
     %Sets default values of optional inputs:
 
@@ -94,8 +84,15 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
     qMatrix = InterpolatedJointAngles(q1,q2,steps);
 
 
+    % Animates through the qMatrix:
+
     for trajStep = 1:steps
+
+        % Moves the can if specified
+
         myRobot.model.animate(qMatrix(trajStep,:));
+
+            %if block carry is set to 1, move the block as well
      
             if blockCarry == 1
                 trNew = FkineTrDobot((qMatrix(trajStep,:)),baseTr);       
