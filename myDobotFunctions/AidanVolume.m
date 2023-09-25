@@ -42,13 +42,12 @@ function [volume] = AidanVolume(robot,boundryTrue)
         end
     end
     
-    if nargin == 1
-        plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
-    
-    else
+    if boundryTrue
         k = boundary(pointCloud);
         trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
-
+    
+    else
+        plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
     end
     
     [k,av] = convhull(pointCloud);

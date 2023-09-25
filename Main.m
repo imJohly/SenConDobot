@@ -40,7 +40,8 @@ transformedVertices = [vertices,ones(size(vertices,1),1)] * GreenCubePos';
 set(GreenCube,'Vertices',transformedVertices(:,1:3));
 
 
-floor = surf([-0.35,-0.35;0.45,0.45] ,[-0.45,0.45;-0.45,0.45] ,[0,0;0,0] ,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
+floor = surf([-0.6,-0.6;0.5,0.5] ,[-0.6,0.6;-0.6,0.6] ,[0,0;0,0]...
+,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
 rotate(floor,[0,0,1],180);
 
 %% UTS Dobot
