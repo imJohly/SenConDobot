@@ -1,7 +1,35 @@
 %% Run this section to delete objects
-                
-DeleteObjects(RedCube,BlueCube,GreenCube,floor)
-              % ^ Input all objects to delete here
+
+try 
+    delete(RedCube); 
+catch
+    warning('Could not delete RedCube')
+end
+
+
+try 
+    delete(BlueCube); 
+catch
+    warning('Could not delete BlueCube')
+end
+
+
+try 
+    delete(GreenCube); 
+catch
+    warning('Could not delete GreenCube')
+end
+
+
+try 
+    delete(floor); 
+catch
+    warning('Could not delete GreenCube')
+end
+
+
+
+
 %%
 clc
 clf

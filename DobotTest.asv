@@ -22,8 +22,4 @@ zBase = 0
 
 baseTr = trans(xBase, yBase, zBase)
 
-q1Test = atan(yTarget/xTarget)
-q2Test
-q3Test
-q4Test = pi - q3Test - q2Test;
-q5Test = 0 
+q1
