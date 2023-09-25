@@ -67,9 +67,9 @@ function [volume] = AidanVolume(robot,boundryTrue)
     fprintf('Range in the x-direction: %.2f to %.2f\n', min_x, max_x);%, 'Distance is: ',xRadius);
     fprintf('Range in the y-direction: %.2f to %.2f\n', min_y, max_y);%, 'Distance is: ',yRadius);
     fprintf('Range in the z-direction: %.2f to %.2f\n', min_z, max_z);%, 'Distance is: ',zRadius);
-    xRadius = (max_x - min_x)
-    yRadius = (max_y - min_y)
-    zRadius = (max_z - min_z)
+    xDiameter = (max_x - min_x)
+    yDiameter = (max_y - min_y)
+    zDiameter = (max_z - min_z)
 
     %profile off;
     %profile viewer;

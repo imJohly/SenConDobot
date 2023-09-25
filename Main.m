@@ -50,20 +50,21 @@ mdl_gripper
 
 
 r.model.base = transl(0,0,0) * rpy2tr(0,0,0);
-r.model.animate(realQ);
+ r.model.animate(realQ);
 
 OPEN_GRIPPER_Q = [0 -1 0];
-CLOSE_GRIPPER_Q = [0 -pi/7 pi/5];
+CLOSE_GRIPPER_Q = [0,0.5,0];
 
 % Set Gripper
 
-         %Gripper1.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41013 Industrial Robotics\Assignments\Matlab\Submission\Gripper' );
-         %Gripper2.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41013 Industrial Robotics\Assignments\Matlab\Submission\Gripper' );
-          
+        Gripper1.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper1' );
+
+        Gripper2.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper2' );
+
          % plot vs plot3d
          
-         Gripper1.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
-         Gripper2.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
+         %Gripper1.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
+         %Gripper2.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
 
 
 %Set Gripper on robot
@@ -74,8 +75,8 @@ CLOSE_GRIPPER_Q = [0 -pi/7 pi/5];
         Gripper2.animate(Gripper2.getpos);
 
 
-Vol = AidanVolume(r.model,true)
-lighting none;
+%Vol = AidanVolume(r.model,true)
+%lighting none;
 
 %%
 %r.model.teach(realQ);
