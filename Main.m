@@ -10,7 +10,8 @@ STEPS = 50;
 q = zeros(1,5);
 realQ = [0,pi/4,pi/4,0,0];
 
-pickPosition = transl(0.3, 0.1 , 0.1)
+pickPosition = transl(0.25,0.1,0);
+
 offset = transl(0,0,0.05) * rpy2tr(0,0,pi/2);
 
 plot3(pickPosition(1,4),pickPosition(2,4),pickPosition(3,4),'r.');
@@ -19,22 +20,33 @@ plot3(pickPosition(1,4),pickPosition(2,4),pickPosition(3,4),'r.');
 
 
 %% Set Up Objects
-
+RepCubePos = transl(-0.05,-0.25,0);
+BlueCubePos = transl(-0.05,0.25,0);
+GreenCubePos = transl(0.25,0.1,0);
 
 RedCube = PlaceObject('RedCube.ply');
 vertices = get(RedCube,'Vertices');
-transformedVertices = [vertices,ones(size(vertices,1),1)] * transl(0.3,0.1,0)';
+transformedVertices = [vertices,ones(size(vertices,1),1)] * RepCubePos';
 set(RedCube,'Vertices',transformedVertices(:,1:3));
 
+BlueCube = PlaceObject('BlueCube.ply');
+vertices = get(BlueCube,'Vertices');
+transformedVertices = [vertices,ones(size(vertices,1),1)] * BlueCubePos';
+set(BlueCube,'Vertices',transformedVertices(:,1:3));
 
-floor = surf([-0.35,-0.35;0.45,0.45] ,[-0.45,0.45;-0.45,0.45] ,[0,0;0,0] ...
-,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
+GreenCube = PlaceObject('GreenCube.ply');
+vertices = get(GreenCube,'Vertices');
+transformedVertices = [vertices,ones(size(vertices,1),1)] * GreenCubePos';
+set(GreenCube,'Vertices',transformedVertices(:,1:3));
 
+
+floor = surf([-0.35,-0.35;0.45,0.45] ,[-0.45,0.45;-0.45,0.45] ,[0,0;0,0] ,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
 rotate(floor,[0,0,1],180);
 
 %% UTS Dobot
 r = Dobot;
 mdl_gripper
+
 
 r.model.base = transl(0,0,0) * rpy2tr(0,0,0);
 r.model.animate(realQ);
@@ -61,18 +73,18 @@ CLOSE_GRIPPER_Q = [0 -pi/7 pi/5];
         Gripper2.animate(Gripper2.getpos);
 
 
-%Vol = AidanVolume(r.model)
-
+Vol = AidanVolume(r.model,true)
+lighting none;
 
 %%
-
-
+%r.model.teach(realQ);
+redGuess = [0.3142    1.2435    0.9111    0.9425         0]
 
 q = r.model.getpos;
-q = r.model.ikcon(pickPosition ,r.model.getpos);
-Qmatrix = jtraj(r.model.getpos,q,STEPS)
+q = r.model.ikcon(pickPosition ,redGuess)
+r.model.fkine(q)
+Qmatrix = jtraj(r.model.getpos,q,STEPS);
 
-%lighting none;
 axis([-0.5,0.5,-0.5,0.5,-0.2,0.5])
 
 for i = 1:STEPS
