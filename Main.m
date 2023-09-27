@@ -1,7 +1,12 @@
 %% Run this section to delete objects
                 
-DeleteObjects(RedCube,BlueCube,GreenCube,floor)
-              % ^ Input all objects to delete here
+try 
+    DeleteObjects(RedCube,BlueCube,GreenCube,floor);
+                % ^ Input all objects to delete here
+catch
+    disp("No objects to delete")
+end
+              
 %%
 clc
 clf
@@ -21,67 +26,61 @@ offset = transl(0,0,0.05) * rpy2tr(0,0,pi/2);
 
 plot3(pickPosition(1,4),pickPosition(2,4),pickPosition(3,4),'r.');
 
-
-
-
 %% Set Up Objects
+
+%Placing in objects
+RedCube = PlaceObject('RedCube.ply');
+BlueCube = PlaceObject('BlueCube.ply');
+GreenCube = PlaceObject('GreenCube.ply');
+
+%Target position of cubes
 RedCubePos = transl(-0.05,-0.25,0);
 BlueCubePos = transl(-0.05,0.25,0);
 GreenCubePos = transl(0.25,0.1,0);
 
-RedCube = PlaceObject('RedCube.ply');
-vertices = get(RedCube,'Vertices');
-transformedVertices = [vertices,ones(size(vertices,1),1)] * RedCubePos';
-set(RedCube,'Vertices',transformedVertices(:,1:3));
+%Function to Move the cubes
+MoveObject(RedCube, RedCubePos)
+MoveObject(BlueCube, BlueCubePos)
+MoveObject(GreenCube, GreenCubePos)
 
-BlueCube = PlaceObject('BlueCube.ply');
-vertices = get(BlueCube,'Vertices');
-transformedVertices = [vertices,ones(size(vertices,1),1)] * BlueCubePos';
-set(BlueCube,'Vertices',transformedVertices(:,1:3));
-
-GreenCube = PlaceObject('GreenCube.ply');
-vertices = get(GreenCube,'Vertices');
-transformedVertices = [vertices,ones(size(vertices,1),1)] * GreenCubePos';
-set(GreenCube,'Vertices',transformedVertices(:,1:3));
-
-
+%Placing in the floor
 floor = surf([-0.6,-0.6;0.5,0.5] ,[-0.6,0.6;-0.6,0.6] ,[0,0;0,0]...
 ,'CData',imread('Floor.jpg') ,'FaceColor','texturemap');
 rotate(floor,[0,0,1],180);
 
 %% UTS Dobot
 r = Dobot;
-mdl_gripper
-
-
-r.model.base = transl(0,0,0) * rpy2tr(0,0,0);
- r.model.animate(realQ);
-
-OPEN_GRIPPER_Q = [0 -1 0];
-CLOSE_GRIPPER_Q = [0,0.5,0];
-
-% Set Gripper
-
-        Gripper1.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper1' );
-
-        Gripper2.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper2' );
-
-         % plot vs plot3d
-         
-         %Gripper1.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
-         %Gripper2.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
-
-
-%Set Gripper on robot
-        gripperLoc = r.model.fkineUTS(r.model.getpos);
-        Gripper1.base = gripperLoc;
-        Gripper2.base = gripperLoc;
-        Gripper1.animate(Gripper1.getpos);
-        Gripper2.animate(Gripper2.getpos);
-
-
-%Vol = AidanVolume(r.model,true)
-%lighting none;
+% mdl_gripper
+% 
+% 
+% r.model.base = transl(0,0,0) * rpy2tr(0,0,0);
+%  r.model.animate(realQ);
+% 
+% OPEN_GRIPPER_Q = [0 -1 0];
+% CLOSE_GRIPPER_Q = [0,0.5,0];
+% 
+% % Set Gripper
+% 
+%         Gripper1.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper1' );
+% 
+%         Gripper2.plot3d(CLOSE_GRIPPER_Q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper2' );
+% 
+%          % plot vs plot3d
+% 
+%          %Gripper1.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
+%          %Gripper2.plot(q,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','nobase','noshadow');
+% 
+% 
+% %Set Gripper on robot
+%         gripperLoc = r.model.fkineUTS(r.model.getpos);
+%         Gripper1.base = gripperLoc;
+%         Gripper2.base = gripperLoc;
+%         Gripper1.animate(Gripper1.getpos);
+%         Gripper2.animate(Gripper2.getpos);
+% 
+% 
+% %Vol = AidanVolume(r.model,true)
+% %lighting none;
 
 %%
 %r.model.teach(realQ);
@@ -118,6 +117,24 @@ zGripperOffset = 0.03;
 
 % need a block array that updates - ID of the block objects
 % need a vertices array that updates - Poistion of the block
+
+blockInformation = zeros(1000,8);
+programStop = false;
+counter = 1;
+
+while programStop == false    
+
+    blockInformation = GetNewCube(counter,blockInformation,)
+
+    q = DobotIk(x,y,z);
+
+
+
+
+    counter = counter+1;
+
+end
+
 
 for i = 1:1
 
