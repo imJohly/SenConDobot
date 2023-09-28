@@ -79,8 +79,12 @@ r = Dobot;
 %         Gripper2.animate(Gripper2.getpos);
 % 
 % 
-% %Vol = AidanVolume(r.model,true)
-% %lighting none;
+%% Point Cloud and test point
+pointCloud = AidanVolume(r.model,false,false);
+
+testPoint = transl(0.3, 0, 0.1);
+plot3(testPoint(1,4),testPoint(2,4),testPoint(3,4),'-O');
+TestPoint(pointCloud,testPoint)
 
 %%
 %r.model.teach(realQ);

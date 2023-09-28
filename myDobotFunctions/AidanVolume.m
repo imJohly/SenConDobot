@@ -1,4 +1,4 @@
-function [volume] = AidanVolume(robot,boundryTrue)
+function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
     %profile clear;
     %profile on;
     
@@ -42,16 +42,17 @@ function [volume] = AidanVolume(robot,boundryTrue)
         end
     end
     
-    if boundryTrue
-        k = boundary(pointCloud);
-        trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
-    
-    else
-        plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+    if plotPoints
+        if boundryTrue
+            k = boundary(pointCloud);
+            trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
+
+        else
+            plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
+        end
     end
-    
     [k,av] = convhull(pointCloud);
-    volume = av;
+    volume = av
     counter
 
     min_x = min(pointCloud(:, 1));
