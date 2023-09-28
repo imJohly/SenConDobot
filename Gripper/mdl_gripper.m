@@ -27,7 +27,7 @@ qz = [0 0 0];
 % hold on
 % newq = [0,0.5,0];
 % Gripper1.plot3d(newq,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper1' );
-%  Gripper2.plot(newq);
+%  Gripper2.plot(newq,'nowrist','notiles', 'noarrow','nojaxes','nobase');
 % Gripper2.plot3d(newq,'delay',0.01,'noname','nowrist','notiles', 'noarrow','nojaxes','path','D:\OneDrive - UTS\University\Subjects\Year 3\Sem 2\41014 Sensors and Control\Git\SenConDobot\Gripper\Gripper2' );
 % 
 % 

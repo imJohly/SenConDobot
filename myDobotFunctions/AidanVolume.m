@@ -41,19 +41,28 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
             end
         end
     end
-    
+
+    alpha = 0.06;
+    shp = alphaShape(pointCloud, alpha);
+    workingVolume = volume(shp)
+
     if plotPoints
         if boundryTrue
-            k = boundary(pointCloud);
-            trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
+            % k = boundary(pointCloud);
+            % trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
+
+            plot(shp);
 
         else
             plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
         end
     end
     [k,av] = convhull(pointCloud);
-    volume = av
+    workSpaceVolume = av
     counter
+
+
+
 
     min_x = min(pointCloud(:, 1));
     max_x = max(pointCloud(:, 1));
