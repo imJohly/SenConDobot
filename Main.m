@@ -84,7 +84,7 @@ pointCloud = AidanVolume(r.model,false,false);
 
 testPoint = transl(0.3, 0, 0.1);
 plot3(testPoint(1,4),testPoint(2,4),testPoint(3,4),'-O');
-TestPoint(pointCloud,testPoint)
+validPoint = TestPoint(pointCloud,testPoint)
 
 %%
 %r.model.teach(realQ);
