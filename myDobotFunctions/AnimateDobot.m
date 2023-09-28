@@ -79,7 +79,7 @@ function [] = AnimateDobot(baseTr, i, myRobot, vertices, block, steps, zGripperO
     end
 
 
-    % Generates a quintic polynomial qMatrix based on q1 and q2
+    % Generates a trapezoidal velocity qMatrix based on q1 and q2
 
     qMatrix = InterpolatedJointAngles(q1,q2,steps);
 

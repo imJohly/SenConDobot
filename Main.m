@@ -80,7 +80,7 @@ r = Dobot;
 % 
 % 
 %% Point Cloud and test point
-pointCloud = AidanVolume(r.model,false,false);
+%pointCloud = AidanVolume(r.model,false,false);
 
 testPoint = transl(0.3, 0, 0.1);
 plot3(testPoint(1,4),testPoint(2,4),testPoint(3,4),'-O');
@@ -119,51 +119,45 @@ vertices = 1; %array of block vertices
 steps = 50;
 zGripperOffset = 0.03;
 
-% need a block array that updates - ID of the block objects
-% need a vertices array that updates - Poistion of the block
+redBlockPos = transl(0,-0.2,0)*trotz(0);
+blueBlockPos = transl(0,0.2,0)*trotz(0);
+greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
-blockInformation = zeros(1000,8);
+blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
+%blockInformation = [block_no.,block_colour, x_start, y_start, z_start, x_end, y_end, z_end, z_rotation]
+%^ Shows what values are stored in each row from 1 to 9.
+
 programStop = false;
 counter = 1;
 
 while programStop == false    
 
-    blockInformation = GetNewCube(counter,blockInformation,)
+    [blockInformation,programStop] = GetNewCube(counter,programStop,blockInformation,redBlockPos,blueBlockPos,greenBlockPos);
+    
+    %(baseTr, i, myRobot, vertices, block, steps, zGripperOffset, target, guess, qAngles, offset, blockCarry, gripperQuery, adjustment)
 
-    q = DobotIk(x,y,z);
-
-
-
+    % Move to above block start
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 0,         0) 
+    
+    % Move to block start, close gripper
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       0,      0,         1) 
+    
+    % Move to can above block start, move blok
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 1,         0)
+    
+    % Move to above block deposit, move block
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 1,         0) 
+    
+    % Move to block deposit, move block, open gripper
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, 0,      1,         2) 
+    
+    % Move to above block deposit
+    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 0,         0) 
 
     counter = counter+1;
 
 end
 
-
-for i = 1:1
-
-%(baseTr, i, myRobot, vertices, block, steps, zGripperOffset, target, guess, qAngles, offset, blockCarry, gripperQuery, adjustment)
-
-% Move to above block start
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 0,         0) 
-
-% Move to block start, close gripper
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       0,      0,         1) 
-
-% Move to can above block start, move blok
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 1,         0)
-
-% Move to above block deposit, move block
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 1,         0) 
-
-% Move to block deposit, move block, open gripper
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, 0,      1,         2) 
-
-% Move to above block deposit
-AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 0,         0) 
-
-
-end
 %% Functionsrobot
 
 

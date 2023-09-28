@@ -79,8 +79,12 @@ r = Dobot;
 %         Gripper2.animate(Gripper2.getpos);
 % 
 % 
-% %Vol = AidanVolume(r.model,true)
-% %lighting none;
+%% Point Cloud and test point
+%pointCloud = AidanVolume(r.model,false,false);
+
+testPoint = transl(0.3, 0, 0.1);
+plot3(testPoint(1,4),testPoint(2,4),testPoint(3,4),'-O');
+validPoint = TestPoint(pointCloud,testPoint)
 
 %%
 %r.model.teach(realQ);
@@ -115,13 +119,26 @@ vertices = 1; %array of block vertices
 steps = 50;
 zGripperOffset = 0.03;
 
-% need a block array that updates - ID of the block objects
-% need a vertices array that updates - Poistion of the block
+redBlockPos = transl(0,-0.2,0)*trotz(0);
+blueBlockPos = transl(0,0.2,0)*trotz(0);
+greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
-blockInformation = zeros(1000,8)
-programStop = false
+blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
+%blockInformation = [block_no.,block_colour, x_start, y_start, z_start, x_end, y_end, z_end, z_rotation]
+%^ Shows what values are stored in each row from 1 to 9.
 
-while programStop == false
+programStop = false;
+counter = 1;
+
+while programStop == false    
+
+    [blockInformation,programStop] = GetNewCube(counter,programStop,blockInformation,redBlockPos,blueBlockPos,greenBlockPos);
+
+    q = DobotIk(r,target);
+
+    counter = counter+1;
+
+end
 
 
 for i = 1:1
