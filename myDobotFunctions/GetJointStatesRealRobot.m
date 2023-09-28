@@ -1,4 +1,4 @@
-function [JointStates] = GetJoinStatesRealRobot()
+function [JointStates] = GetJointStatesRealRobot()
 %GetJoinStatesRealRobot Summary of this function goes here
 %   Detailed explanation goes here
 
