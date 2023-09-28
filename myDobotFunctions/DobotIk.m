@@ -17,7 +17,7 @@ function [q] = DobotIk(myRobot,x,y,z)
     link5d = myRobot.model.links(5).d;
     
     
-    eq1 = @(q2, q3) (link2a * sin(q2) + link3a * sin(q2 + q3) + link4a) * cos(q1) - x;
+    eq1 = @(q2, q3) (link2a * sin(q2) + link3a * sin(q2 + q3 - link) + link4a) * cos(q1) - x;
     eq2 = @(q2, q3) (link2a * sin(q2) + link3a * sin(q2 + q3) + link4a) * sin(q1) - y;
     eq3 = @(q2, q3) link1d + link5d + link2a * cos(q2) + link3a *cos(q2 + q3) - z;
     
@@ -33,7 +33,7 @@ function [q] = DobotIk(myRobot,x,y,z)
     q2 = solution(1);
     q3 = solution(2);
     
-    q4 = pi/2 - q3 - q2;
+    q4 = pi - q3 - q2;
     
     q5 = 0; %Change later when needed
     

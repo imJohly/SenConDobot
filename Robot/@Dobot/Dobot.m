@@ -35,7 +35,8 @@ classdef Dobot < RobotBaseClass
             link(5) = Link('d',-0.05,           'a',    0,      'alpha',    0,      'offset',   0,     'qlim',[deg2rad(-85),deg2rad(85)]);
 
             %UTS Tool box offsets
-            %link(4).offset = -pi/2;
+            link(3).offset = pi/2;
+            link(4).offset = -pi/2;
             link(5).offset = pi;
 
             self.model = SerialLink(link,'name',self.name);
