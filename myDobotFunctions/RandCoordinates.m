@@ -1,4 +1,4 @@
-function [xyzPos] = RandCoordinates(limits)
+function [xyzrPos] = RandCoordinates(limits)
 
 %RandCoordinates Gets random coordinates within specified limits
     
@@ -6,7 +6,8 @@ function [xyzPos] = RandCoordinates(limits)
     x = limits(1) + (limits(2) - limits(1)) * rand;
     y = limits(3) + (limits(3) - limits(3)) * rand;
     z = limits(5) + (limits(6) - limits(5)) * rand;
+    r = limits(7) + (limits(8) - limits(7)) * rand;
     
-    xyzPos = [x,y,z];
+    xyzrPos = [x,y,z,r];
 
 end

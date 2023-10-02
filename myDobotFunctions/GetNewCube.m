@@ -33,7 +33,7 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
         
         %% Random starting coordinate
         
-        % Define the limits for x, y, and z
+        % Define the limits for x, y, z and r.
         x_min = 0.17;
         x_max = 0.3;
         
@@ -42,10 +42,13 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
         
         z_min = 0;
         z_max = 0.1;
+
+        r_min = -pi/4;
+        r_max = pi/4;
                                 
-        xyzPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max]); %Custom function to get random coordinates within a limit
+        xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max]); %Custom function to get random coordinates within a limit
         
-        blockInformation(counter,3:5) = xyzPos; %Columns 3 to 5 store blocks initial location
+        blockInformation(counter,3:6) = xyzrPos; %Columns 3 to 5 store blocks initial location
         
         %% Colour ID and target location
         %1 is red
@@ -62,37 +65,37 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
         
         if userInput == 'r'|| randNumber == 1
         
-            blockInformation(counter,6:8) = [redBlockPos(1,4),redBlockPos(2,4),...
+            blockInformation(counter,7:9) = [redBlockPos(1,4),redBlockPos(2,4),...
                 redBlockPos(3,4)+((sum(blockInformation(:, 2) == 1))*blockHeight)];
                 %Stores target position in columns 6 to 8. A multiplier is
                 %added to the z value to account for exisiting block
         
             % Calculate the rotation about the global z axis.
-            blockInformation(counter,9) = atan2(redBlockPos(2,1), redBlockPos(1,1));
+            blockInformation(counter,10) = atan2(redBlockPos(2,1), redBlockPos(1,1));
     
             blockInformation(counter,2) = 1; %Stores colour in 2nd column
             
         elseif userInput == 'b'|| randNumber == 2
         
-            blockInformation(counter,6:8) = [blueBlockPos(1,4),blueBlockPos(2,4),...
+            blockInformation(counter,7:9) = [blueBlockPos(1,4),blueBlockPos(2,4),...
                 blueBlockPos(3,4)+((sum(blockInformation(:, 2) == 2))*blockHeight)];
                 %Stores target position in columns 6 to 8. A multiplier is
                 %added to the z value to account for exisiting blocks
     
             % Calculate the rotation about the global z axis.
-            blockInformation(counter,9) = atan2(blueBlockPos(2,1), blueBlockPos(1,1));
+            blockInformation(counter,10) = atan2(blueBlockPos(2,1), blueBlockPos(1,1));
     
             blockInformation(counter,2) = 2; %Stores colour in 2nd column
         
         elseif userInput == 'g'|| randNumber == 3
         
-            blockInformation(counter,6:8) = [greenBlockPos(1,4),greenBlockPos(2,4),...
+            blockInformation(counter,7:9) = [greenBlockPos(1,4),greenBlockPos(2,4),...
                 greenBlockPos(3,4)+((sum(blockInformation(:, 2) == 3))*blockHeight)];
                 %Stores target position in columns 6 to 8. A multiplier is
                 %added to the z value to account for exisiting blocks
     
             % Calculate the rotation about the global z axis.
-            blockInformation(counter,9) = atan2(greenBlockPos(2,1), greenBlockPos(1,1));
+            blockInformation(counter,10) = atan2(greenBlockPos(2,1), greenBlockPos(1,1));
     
             blockInformation(counter,2) = 3; %Stores colour in 2nd column
     

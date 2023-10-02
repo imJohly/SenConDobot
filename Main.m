@@ -124,7 +124,7 @@ blueBlockPos = transl(0,0.2,0)*trotz(0);
 greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
-%blockInformation = [block_no.,block_colour, x_start, y_start, z_start, x_end, y_end, z_end, z_rotation]
+%blockInformation = [block_no.,block_colour, x_start, y_start, z_start, z_rot_start, x_end, y_end, z_end, z_rot_end]
 %^ Shows what values are stored in each row from 1 to 9.
 
 programStop = false;
