@@ -12,7 +12,7 @@ classdef Dobot < RobotBaseClass
         plyFileNameStem = 'Dobot';
 
         %> defaultRealQ 
-        defaultRealQ  = [0,0,0,pi/2,0];
+        defaultRealQ  = [0,pi/4,pi/4,0,0];
     end
 
     methods (Access = public) 
@@ -22,7 +22,7 @@ classdef Dobot < RobotBaseClass
             if nargin == 1			
 				self.model.base = self.model.base.T * baseTr;
             end            
-            self.homeQ = self.defaultRealQ;
+            self.homeQ = self.RealQToModelQ(self.defaultRealQ);
             self.PlotAndColourRobot();
         end
 
@@ -38,7 +38,7 @@ classdef Dobot < RobotBaseClass
         end   
     end
     
-    % methods(Hidden)
+    methods(Hidden)
 % %% TestMoveJoints
 %         % Overriding the RobotBaseClass function, since it won't work properly
 %         % for this robot
@@ -46,7 +46,7 @@ classdef Dobot < RobotBaseClass
 %             self.TestMoveDobot();
 %         end
 % 
-% %% Test Move Dobot
+%% Test Move Dobot
 %     function TestMoveDobot(self)
 %             qPath = jtraj(self.model.qlim(:,1)',self.model.qlim(:,2)',50);                       
 %             for i = 1:50                

@@ -19,10 +19,11 @@ function [] = AnimatePos1toPos2(myRobot,blockInformation,counter,pos2,steps,bloc
                 trNew(3,4) = trNew(3,4)-zGripperOffset;
                 
 
-                MoveObject(blockInformation(counter,1),trNew)
+                %MoveObject(blockInformation(counter,1),trNew)
                 
-                % transformedVertices = [vertices,ones(size(vertices,1),1)] * trNew';
-                % set(blockInformation(counter,1),'Vertices',transformedVertices(:,1:3));
+                vertices = get(blockInformation(counter,1),'Vertices');
+                transformedVertices = [vertices,ones(size(vertices,1),1)] * trNew';
+                set(blockInformation(counter,1),'Vertices',transformedVertices(:,1:3));
                  
             else
     
