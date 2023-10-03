@@ -1,29 +1,29 @@
-function [] = AnimateDobotNew(myRobot, blockInformation, counter, stepsLong, stepsShort, offset, zGripperOffset)
+function [] = AnimateDobotNew(myRobot, blockInformation, blockObjects, counter, stepsLong, stepsShort, offset, zGripperOffset, vertices)
 %AnimateDobotNew
 
-%extract start position from Dobot
-startPos = transl(blockInformation(counter,3:5))*trotz(counter,6);
+    %extract start position from Dobot
+    startPos = transl(blockInformation(counter,3:5))*trotz(counter,6)*transl(0,0,zGripperOffset);
+    
+    %calculate offset position from start
+    startPosOffset = startPos*transl(0,0,offset);
+    
+    %extract end position from Dobot
+    targetPos = transl(blockInformation(counter,7:9))*trotz(counter,10)*transl(0,0,zGripperOffset);
+    
+    %calculate offset position from end
+    targetPosOffset = targetPos*transl(0,0,offset);
 
-%calculate offset position from start
-startPosOffset = startPos*transl(0,0,offset);
+    AnimatePos1toPos2(myRobot, blockObjects, counter, startPosOffset,  stepsLong,  0, 0, zGripperOffset, vertices) %current position to block start offset
 
-%extract end position from Dobot
-targetPos = transl(blockInformation(counter,7:9))*trotz(counter,10);
+    AnimatePos1toPos2(myRobot, blockObjects, counter, startPos,        stepsShort, 0, 1, zGripperOffset, vertices) %current position to block start             gripper close
 
-%calculate offset position from end
-targetPosOffset = targetPos*transl(0,0,offset);
+    AnimatePos1toPos2(myRobot, blockObjects, counter, startPosOffset,  stepsShort, 1, 0, zGripperOffset, vertices) %current position to block start offset      carry
 
-    AnimatePos1toPos2(myRobot, blockInformation, counter, startPosOffset,  stepsLong,  0, 0, zGripperOffset) %current position to block start offset
+    AnimatePos1toPos2(myRobot, blockObjects, counter, targetPosOffset, stepsLong,  1, 0, zGripperOffset, vertices) %current position to block target offset     carry
 
-    AnimatePos1toPos2(myRobot, blockInformation, counter, startPos,        stepsShort, 0, 1, zGripperOffset) %current position to block start             gripper close
+    AnimatePos1toPos2(myRobot, blockObjects, counter, targetPos,       stepsShort, 1, 2, zGripperOffset, vertices) %current position to block target,           carry, gripper open
 
-    AnimatePos1toPos2(myRobot, blockInformation, counter, startPosOffset,  stepsShort, 1, 0, zGripperOffset) %current position to block start offset      carry
-
-    AnimatePos1toPos2(myRobot, blockInformation, counter, targetPosOffset, stepsLong,  1, 0, zGripperOffset) %current position to block target offset     carry
-
-    AnimatePos1toPos2(myRobot, blockInformation, counter, targetPos,       stepsShort, 1, 2, zGripperOffset) %current position to block target,           carry, gripper open
-
-    AnimatePos1toPos2(myRobot, blockInformation, counter, targetPosOffset, stepsShort, 0, 0, zGripperOffset) %current position to block target offset
+    AnimatePos1toPos2(myRobot, blockObjects, counter, targetPosOffset, stepsShort, 0, 0, zGripperOffset, vertices) %current position to block target offset
 
 
 

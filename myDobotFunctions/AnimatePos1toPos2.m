@@ -1,4 +1,4 @@
-function [] = AnimatePos1toPos2(myRobot,blockInformation,counter,pos2,steps,blockCarry, gripper, zGripperOffset)
+function [] = AnimatePos1toPos2(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, zGripperOffset, vertices)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -17,13 +17,8 @@ function [] = AnimatePos1toPos2(myRobot,blockInformation,counter,pos2,steps,bloc
             if blockCarry == 1
                 trNew = FkineTrDobot(qMatrix(trajStep,:));       
                 trNew(3,4) = trNew(3,4)-zGripperOffset;
-                
 
-                %MoveObject(blockInformation(counter,1),trNew)
-                
-                vertices = get(blockInformation(counter,1),'Vertices');
-                transformedVertices = [vertices,ones(size(vertices,1),1)] * trNew';
-                set(blockInformation(counter,1),'Vertices',transformedVertices(:,1:3));
+                MoveObject(blockObjects(counter),trNew,vertices)
                  
             else
     

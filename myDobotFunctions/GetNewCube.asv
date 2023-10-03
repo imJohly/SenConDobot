@@ -1,4 +1,4 @@
-function [blockInformation,programStop] = GetNewCube(counter,programStop,blockInformation,redBlockPos,blueBlockPos,greenBlockPos)
+function [blockInformation,blockObjects,programStop] = GetNewCube(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
 %GetNewCube Generates a new cube based on user input and produces and stores relevant values
 
     %% Gets a user input to determine next block
@@ -38,7 +38,7 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
         y_max = 0.12;
         
         z_min = 0;
-        z_max = 0.1;
+        z_max = 0;
 
         r_min = -pi/4;
         r_max = pi/4;
@@ -60,6 +60,7 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
             randNumber = randsample(3,1); % Assigns random colour if needed
         end
         
+
         if userInput == 'r'|| randNumber == 1
         
             blockInformation(counter,7:9) = [redBlockPos(1,4),redBlockPos(2,4),...
@@ -73,8 +74,13 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
             blockInformation(counter,2) = 1; %Stores colour in 2nd column
 
             %places in red cube, stores vertices in column 1 of blockInformation   
-            blockInformation(counter,1) = PlaceObject('RedCube.ply');
-            
+            blockObjects(counter) = PlaceObject('RedCube.ply');
+
+             %moves red cube to start position
+            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
+            MoveObject(blockObjects(counter), blockStart)
+        
+
         elseif userInput == 'b'|| randNumber == 2
         
             blockInformation(counter,7:9) = [blueBlockPos(1,4),blueBlockPos(2,4),...
@@ -90,8 +96,11 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
             %places in blue cube, stores vertices in column 1 of blockInformation   
             blockInformation(counter,1) = PlaceObject('BlueCube.ply');
 
-            MoveObject(counter, RedCubePos)
+            %moves blue cube to start position
+            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
+            MoveObject(blockInformation(counter,1), blockStart)
         
+
         elseif userInput == 'g'|| randNumber == 3
         
             blockInformation(counter,7:9) = [greenBlockPos(1,4),greenBlockPos(2,4),...
@@ -106,6 +115,10 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
 
             %places in green cube, stores vertices in column 1 of blockInformation   
             blockInformation(counter,1) = PlaceObject('GreenCube.ply'); 
+
+            %moves green cube to start position
+            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
+            MoveObject(blockInformation(counter,1), blockStart)
     
         else
             disp("Warning, an error has occured when attempting to assign block data")
@@ -115,11 +128,3 @@ function [blockInformation,programStop] = GetNewCube(counter,programStop,blockIn
     end
 
 end
-
-
-
-
-%Function to Move the cubes
-MoveObject(RedCube, RedCubePos)
-MoveObject(BlueCube, BlueCubePos)
-MoveObject(GreenCube, GreenCubePos)
