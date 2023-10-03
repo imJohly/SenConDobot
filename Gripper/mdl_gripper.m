@@ -12,7 +12,7 @@ Gripper1 = SerialLink([
     ], ...
     'name', 'Griper 1');
 %qz = [0 0 0];
-
+Gripper1.model3d = 'DOBOT/Gripper1';
 
 %Second gripper
 Gripper2 = SerialLink([
@@ -22,6 +22,8 @@ Gripper2 = SerialLink([
     ], ...
     'name', 'Griper 2');
 qz = [0 0 0];
+
+Gripper2.model3d = 'DOBOT/Gripper2';
 
 % clf
 % hold on
