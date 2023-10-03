@@ -114,10 +114,17 @@ end
 
 %% AnimateDobot
 
+r = Dobot;
+
+hold on;
+%%
 block = 1; %array of block objects
 vertices = 1; %array of block vertices
-steps = 50;
-zGripperOffset = 0.03;
+stepsLong = 50;
+stepsShort = 20;
+
+offset = 0.05;
+zGripperOffset = 0.15;
 
 redBlockPos = transl(0,-0.2,0)*trotz(0);
 blueBlockPos = transl(0,0.2,0)*trotz(0);
@@ -134,27 +141,13 @@ while programStop == false
 
     [blockInformation,programStop] = GetNewCube(counter,programStop,blockInformation,redBlockPos,blueBlockPos,greenBlockPos);
     
-    %(baseTr, i, myRobot, vertices, block, steps, zGripperOffset, target, guess, qAngles, offset, blockCarry, gripperQuery, adjustment)
+    if blockInformation(counter,2) ~= 0
 
-    % Move to above block start
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 0,         0) 
-    
-    % Move to block start, close gripper
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       0,      0,         1) 
-    
-    % Move to can above block start, move blok
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, target, guess, 0,       offset, 1,         0)
-    
-    % Move to above block deposit, move block
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 1,         0) 
-    
-    % Move to block deposit, move block, open gripper
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, 0,      1,         2) 
-    
-    % Move to above block deposit
-    AnimateDobot(baseTr,i,r,vertices,block,steps,zGripperOffset, 0,      0,     qAngles, offset, 0,         0) 
+        AnimateDobotNew(r,blockInformation,counter,stepsLong,stepsShort,offset,zGripperOffset)
 
-    counter = counter+1;
+        counter = counter+1;
+
+    end
 
 end
 
