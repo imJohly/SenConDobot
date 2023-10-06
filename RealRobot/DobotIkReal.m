@@ -37,7 +37,7 @@ function [q] = DobotIk(myRobot,target)
  
     q4 = pi - q3 - q2;
 
-    q3 = q3 - myRobot.model.links(3).offset - q2;
+    q3 = q3 - myRobot.model.links(3).offset -pi/2 + q2;
     
     q5 = rotation_global_z;
     
