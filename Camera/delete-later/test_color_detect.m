@@ -14,5 +14,5 @@ centroidY = median(columns);
 
 imshow(image);
 hold on;
-plot(centroidX, centroidY, 'ro', 'MarkerSize', 10);
+plot(centroidX, centroidY, 'bo', 'MarkerSize', 10);
 hold off;

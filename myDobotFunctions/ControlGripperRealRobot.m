@@ -5,7 +5,6 @@ function  ControlGripperRealRobot(state)
 
 %Check ros initilised?
 
-
 % Turn on the tool
 [toolStatePub, toolStateMsg] = rospublisher('/dobot_magician/target_tool_state');
 if state
@@ -19,5 +18,10 @@ else
     send(toolStatePub,toolStateMsg);
     fprintf('Closing Gripper\n');
 end
+
+toolStateSubscriber = rossubscriber('/dobot_magician/tool_state');
+pause(2); %Allow some time for MATLAB to start the subscriber
+currentToolState = toolStateSubscriber.LatestMessage.Data
+
 end
 

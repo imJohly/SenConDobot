@@ -1,0 +1,5 @@
+JointQ = [0 0 0 0];
+MoveRealRobot(JointQ)
+ControlGripperRealRobot(true)
+
+GetJointStatesRealRobot()
