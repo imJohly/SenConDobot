@@ -1,4 +1,4 @@
-function [q] = DobotIk(myRobot,target)
+function [q] = DobotIkReal(myRobot,target)
 %DobotIk Custom Inverse Kinematics for the Dobot
 
     x = target(1,4);
