@@ -12,9 +12,9 @@ targetJointTrajMsg.Points = trajectoryPoint;
 
 send(targetJointTrajPub,targetJointTrajMsg);
 
-pause(3)
+pause(1)
 
-qnew = GetJointStatesRealRobot();
+qnew = GetJointStatesRealRobot()
 
 if ~(qValues == qnew)
     qValues

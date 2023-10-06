@@ -31,11 +31,11 @@ counter = 1;
 
 while programStop == false    
 
-    [blockInformation,blockObjects,programStop,vertices] = GetNewCube(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
+    [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNew(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices)
 
         counter = counter+1;
 
