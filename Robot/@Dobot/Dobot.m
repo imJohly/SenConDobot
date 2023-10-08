@@ -40,7 +40,7 @@ classdef Dobot < RobotBaseClass
     
     % methods(Hidden)
 % %% TestMoveJoints
-%         % Overriding the RobotBaseClass function, since it won't work properly
+%         % Overriding the RobotBaseClass function, sice it won't work properly
 %         % for this robot
 %         function TestMoveJoints(self)
 %             self.TestMoveDobot();
