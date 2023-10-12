@@ -64,7 +64,8 @@ classdef Dobot < RobotBaseClass
         function modelQ = RealQToModelQ(realQ)
             modelQ = realQ;
             modelQ(3) = DobotMagician.ComputeModelQ3GivenRealQ2and3( realQ(2), realQ(3) );
-            modelQ(4) = pi - realQ(2) - modelQ(3);    
+            modelQ(4) = pi - realQ(2) - modelQ(3);
+            modelQ(5) = realQ(4);
         end
         
 %% ModelQ3GivenRealQ2and3

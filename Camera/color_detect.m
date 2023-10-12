@@ -7,9 +7,9 @@ red = checkred(image);
 se = strel('square', 20);
 red_dilated = imdilate(red, se);
 
-stats = regionprops(red_dilated, 'BoundingBox', 'Centroid')
-box = stats.BoundingBox
-centroid = stats.Centroid
+stats = regionprops(red_dilated, 'BoundingBox', 'Centroid');
+box = stats.BoundingBox;
+centroid = stats.Centroid;
 
 imshow(image);
 hold on;
