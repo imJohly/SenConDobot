@@ -4,7 +4,7 @@ function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,bloc
 
 
     q1 = myRobot.model.getpos();
-    [q2sim,~] = DobotIkReal(myRobot,pos2);
+    q2sim = myRobot.model.ikcon(pos2,q1);
     
     qMatrix = InterpolatedJointAngles(q1,q2sim,steps);
     
@@ -33,7 +33,10 @@ function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,bloc
     realpos2 = pos2;
     realpos2(3,4) = realpos2(3,4)-z_difference_sim_vs_real;
 
-    [~,q2real] = DobotIkReal(myRobot,realpos2);
+
+    q2realsim = myRobot.model.ikcon(realpos2,GetJointStatesRealRobot());
+    q2real = ModelQToRealQ(q2realsim);
+
     MoveRealRobot(q2real)
 
     if gripper == 1
