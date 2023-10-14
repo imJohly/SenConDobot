@@ -36,7 +36,9 @@ dataLength = 1;
 % Read data from the Arduino
 sysStatus = read(arduinoPort, dataLength, "char");
 %% Set mode: Simulation, Real, Both
-simulationMode = struct('Sim', false, 'Real', false, '');
+simulationMode = struct('Sim', false, 'Real', false);
+simulationMode.Sim = true;
+simulationMode.Real = false;
 
 %%
 
@@ -69,7 +71,7 @@ while programStop == false
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices, arduinoPort, noEstop, status)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices, arduinoPort, noEstop, status, simulationMode, L)
 
         counter = counter+1;
 
