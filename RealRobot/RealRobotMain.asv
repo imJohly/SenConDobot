@@ -1,9 +1,39 @@
 clf
 clear global
 clc
-%%
+%% Simulation Robot
 r = Dobot;
 
+%% Set Up Logging
+L = log4matlab('Assignment2.log');
+ 
+
+%% Set up Estop and sensors
+clear arduinoPort;
+
+desiredPort = 'COM3';
+ports = serialportlist;
+noEstop = false;
+% Create a serial port object for Arduino
+% Check if Estop is connected.
+if any(strcmp(ports, desiredPort))
+    arduinoPort = serialport(desiredPort, 9600,"Timeout",300); 
+    L.mlog = {L.DEBUG,'Assignment2',['E Stop Is Connected']};
+    disp('Emergency Stop is connected.');
+else
+    L.mlog = {L.ERROR,'Assignment2',['E Stop Not Connected']};
+    disp('Emergency Stop is not connected.');
+    noEstop = true;
+end
+
+% Estop Status variables
+Running = '1';
+Stopped = '0';
+Held = '2';
+dataLength = 1;
+
+% Read data from the Arduino
+sysStatus = read(arduinoPort, dataLength, "char");
 %%
 
 hold on;
@@ -16,6 +46,7 @@ stepsShort = 20;
 offset = 0.05;
 zGripperOffset = 0.05;
 
+%Place location of the blocks
 redBlockPos = transl(0,-0.2,0)*trotz(0);
 blueBlockPos = transl(0,0.2,0)*trotz(0);
 greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
@@ -30,14 +61,16 @@ counter = 1;
 
 while programStop == false    
 
-    [blockInformation,blockObjects,programStop,vertices] = GetNewCube(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
+    [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNew(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices, arduinoPort, noEstop)
 
         counter = counter+1;
 
     end
 
 end
+%% edit logging file
+edit('Assignment2.log');

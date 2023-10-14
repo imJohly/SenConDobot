@@ -1,4 +1,4 @@
-function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, zGripperOffset, vertices)
+function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, zGripperOffset, vertices, arduinoPort, noEstop, status)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -7,10 +7,34 @@ function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,bloc
     q2sim = myRobot.model.ikcon(pos2,q1);
     
     qMatrix = InterpolatedJointAngles(q1,q2sim,steps);
-    
+    % Variables for the Estop intergration to know when to display strings
+    % so it doesnt write it every scan
+    first = true;
+    held = false;
     % Animates through the qMatrix:
     for trajStep = 1:steps
-     
+
+        % check if there is an estop connected to the system
+        if ~noEstop
+            sysStatus = read(arduinoPort, 1, "char"); %read the estop data
+            % if estop is pushed wait
+            while ~strcmp(sysStatus,status.Running)   %if the estop data is the stopped state wait for the estop 
+                sysStatus = read(arduinoPort, 1, "char");
+                if first & strcmp(sysStatus,status.Stopped)
+                     L.mlog = {L.ERROR,'Assignment2',['E Stop Pressed']};
+                     disp('Emergency Stop Pressed')
+                     first = false;
+                end
+                if ~held & strcmp(sysStatus,status.Held)
+                     L.mlog = {L.WARN,'Assignment2',['Program Held: Press Start To Resume']};
+                     disp('Program Held: Press Start To Resume')
+                     held = false;
+                end
+
+                pause(1);
+            end
+        end
+
         myRobot.model.animate(qMatrix(trajStep,:));
 
             %if block carry is set to 1, move the block as well    
@@ -26,6 +50,7 @@ function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,bloc
 
         drawnow();
         
+
     end
 
     %real robot part
