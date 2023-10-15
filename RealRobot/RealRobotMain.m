@@ -16,6 +16,7 @@ ports = serialportlist;
 noEstop = false;
 % Create a serial port object for Arduino
 % Check if Estop is connected.
+arduinoPort = false;
 if any(strcmp(ports, eStopDesiredPort))
     arduinoPort = serialport(eStopDesiredPort, 9600,"Timeout",300); 
     L.mlog = {L.DEBUG,'Assignment2',['E Stop Is Connected']};
