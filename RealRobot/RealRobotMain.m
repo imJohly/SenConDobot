@@ -31,10 +31,10 @@ Running = '1';
 Stopped = '0';
 Held = '2';
 status = struct('Running', '1', 'Stopped', '0', 'Held', '2');
-dataLength = 1;
+dataLength = 2;
 
 % Read data from the Arduino
-sysStatus = read(arduinoPort, dataLength, "char");
+%sysStatus = read(arduinoPort, 2, "char");
 
 
 

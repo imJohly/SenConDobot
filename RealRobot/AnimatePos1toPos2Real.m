@@ -11,49 +11,30 @@ if simulationMode.Sim == true
     % so it doesnt write it every scan
     first = true;
     held = false;
+    lightCurtainSafe = true;
     % Animates through the qMatrix:
     for trajStep = 1:steps
 
         % check if there is an estop connected to the system
         if ~noEstop
-            sysStatus = read(arduinoPort, 1, "char"); %read the estop data
-            % if estop is pushed wait
-            while ~strcmp(sysStatus,status.Running)   %if the estop data is the stopped state wait for the estop 
-                sysStatus = read(arduinoPort, 1, "char");
-                if first & strcmp(sysStatus,status.Stopped)
-                     loggerFile.mlog = {loggerFile.ERROR,'Assignment2',['E Stop Pressed']};
-                     disp('Emergency Stop Pressed')
-                     first = false;
-                end
-                if ~held & strcmp(sysStatus,status.Held)
-                     loggerFile.mlog = {loggerFile.WARN,'Assignment2',['Program Held: Press Start To Resume']};
-                     disp('Program Held: Press Start To Resume')
-                     held = true;
-                end
-
-                if strcmp(sysStatus,status.Running)
-                     loggerFile.mlog = {loggerFile.WARN,'Assignment2',['Returned To Running']};
-                     disp('Returned To Running')
-                end
-                %pause(1);
-            end
-        end
+            ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe)
+         end
 
         myRobot.model.animate(qMatrix(trajStep,:));
 
-            %if block carry is set to 1, move the block as well    
-            if blockCarry == 1
-                trNew = FkineTrDobot(qMatrix(trajStep,:));       
-                trNew(3,4) = trNew(3,4)-zGripperOffset;
+        %if block carry is set to 1, move the block as well
+        if blockCarry == 1
+            trNew = FkineTrDobot(qMatrix(trajStep,:));
+            trNew(3,4) = trNew(3,4)-zGripperOffset;
 
-                MoveObject(blockObjects(counter),trNew,vertices)
-                 
-            else
-    
-            end
+            MoveObject(blockObjects(counter),trNew,vertices)
+
+        else
+
+        end
 
         drawnow();
-        
+
 
     end
 end
