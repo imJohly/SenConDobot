@@ -6,14 +6,14 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
     
     %calculate offset position from start
     startPosOffset = startPos;
-    startPosOffset(3) = startPosOffset(3) + offset;
+    startPosOffset(3) = startPosOffset(3) + zGripperOffset;
     
     %extract end position from Dobot
-    targetPos = blockInformation(counter,7:10);
+    targetPos = blockInformation(counter)
+    targetPos = transl(blockInformation(counter,7:9))*trotz(counter,10)*transl(0,0,zGripperOffset);
     
     %calculate offset position from end
-    targetPosOffset = targetPos;
-    targetPosOffset(3) = targetPosOffset(3) + offset;
+    targetPosOffset = targetPos*transl(0,0,offset);
 
     AnimatePos1toPos2Real(myRobot, blockObjects, counter, startPosOffset,  stepsLong,  0, 0, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start offset
 
@@ -26,3 +26,9 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
     AnimatePos1toPos2Real(myRobot, blockObjects, counter, targetPos,       stepsShort, 1, 2, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target,           carry, gripper open
 
     AnimatePos1toPos2Real(myRobot, blockObjects, counter, targetPosOffset, stepsShort, 0, 0, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target offset
+
+
+
+
+%1 animate function
+% takes in required data from block information (start, and end values)

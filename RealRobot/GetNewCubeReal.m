@@ -34,7 +34,7 @@ function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(c
         
         % Set starting coordinate for the time being
 
-        x_start = 0.2;       
+        x_start = 0.25;       
         y_start = 0;
         z_start = 0;
         r_start = 0;

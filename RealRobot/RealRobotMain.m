@@ -29,8 +29,8 @@ offset = 0.05;
 zGripperOffset = 0.05;
 
 %Place location of the blocks
-redBlockPos = transl(0,-0.2,0)*trotz(0);
-blueBlockPos = transl(0,0.2,0)*trotz(0);
+redBlockPos = transl(0,-0.25,0)*trotz(0);
+blueBlockPos = transl(0,0.25,0)*trotz(0);
 greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed

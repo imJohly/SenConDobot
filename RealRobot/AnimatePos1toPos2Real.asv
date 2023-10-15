@@ -45,12 +45,17 @@ end
 
         z_difference_sim_vs_real = -0.02;
 
+        q2RealSim
         realpos2 = pos2;
-        realpos2(3) = realpos2(3) + z_difference_sim_vs_real;
+        realpos2(3) = realpos2(3) + 
+        realpos2ik = realpos2 * trotz(-pi/2);
 
-        q2RealSim = DobotIkReal(myRobot,realpos2);
+        currentQReal = GetJointStatesRealRobot();
+        currentQSim = myRobot.RealQToModelQ(currentQReal);
 
-        q2real = myRobot.ModelQToRealQ(q2RealSim);
+
+        q2realsim =DobotIkReal(myRobot,);
+        q2real = myRobot.ModelQToRealQ(q2realsim);
 
         MoveRealRobot(q2real)
 
