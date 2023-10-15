@@ -1,4 +1,4 @@
-function [noEstop, status] = EStopAndSensors(desiredPort,L)
+function [noEstop, status, arduinoPort ] = EStopAndSensors(desiredPort,L)
 %EStopAndSensors: Contains E-stop and sensor codem returns if there is an
 %E-stop and also the status of the E-stop.
 

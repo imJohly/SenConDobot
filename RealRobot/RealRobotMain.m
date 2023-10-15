@@ -1,5 +1,5 @@
 clf
-clear global
+clear all
 clc
 %% Simulation Robot
 r = Dobot;
@@ -9,7 +9,7 @@ L = log4matlab('Assignment2.log');
  
 
 %% Set up Estop and sensors
-[noEstop, status] = EStopAndSensors('COM3',L);
+[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
 
 %% Set mode: Simulation, Real, Both
 simulationMode = struct('Sim', false, 'Real', false);
