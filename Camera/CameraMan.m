@@ -6,6 +6,7 @@ classdef CameraMan
     properties
         cameraSub
         snap
+        position
     end
 
     methods
@@ -66,6 +67,14 @@ classdef CameraMan
             end
 
             positions = centroids;
+        end
+
+        function position = getObjectPos(pixelPosition)
+            %getObjectPos Gets the relative position of an object given its pixelPositio
+        end
+
+        function position = localToGlobalPos(obj)
+            %localToGlobalPos Converts the local position in camera frame to the global frame
         end
     end
 end
