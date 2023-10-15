@@ -11,13 +11,13 @@ L = log4matlab('Assignment2.log');
 %% Set up Estop and sensors
 clear arduinoPort;
 
-desiredPort = 'COM3';
+eStopDesiredPort = 'COM3';
 ports = serialportlist;
 noEstop = false;
 % Create a serial port object for Arduino
 % Check if Estop is connected.
-if any(strcmp(ports, desiredPort))
-    arduinoPort = serialport(desiredPort, 9600,"Timeout",300); 
+if any(strcmp(ports, eStopDesiredPort))
+    arduinoPort = serialport(eStopDesiredPort, 9600,"Timeout",300); 
     L.mlog = {L.DEBUG,'Assignment2',['E Stop Is Connected']};
     disp('Emergency Stop is connected.');
 else
@@ -35,6 +35,11 @@ dataLength = 1;
 
 % Read data from the Arduino
 sysStatus = read(arduinoPort, dataLength, "char");
+
+
+
+
+
 %% Set mode: Simulation, Real, Both
 simulationMode = struct('Sim', false, 'Real', false);
 simulationMode.Sim = true;
