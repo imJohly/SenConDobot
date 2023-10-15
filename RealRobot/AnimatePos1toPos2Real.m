@@ -25,7 +25,7 @@ if simulationMode.Sim == true
 
         %if block carry is set to 1, move the block as well
         if blockCarry == 1
-            trNew = FkineTrDobot(qMatrix(trajStep,:));
+            trNew = DobotFkReal(myRobot,qMatrix(trajStep,:));
             trNew(3,4) = trNew(3,4)-zGripperOffset;
 
             MoveObject(blockObjects(counter),trNew,vertices)

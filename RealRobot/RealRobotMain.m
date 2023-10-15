@@ -22,11 +22,12 @@ hold on;
 
 %Adjust steps to fine tune robot motion
 stepsLong = 50;
+
 stepsShort = 20;
 
 %Fine tune offset of robot above block and distance to gripper
-offset = 0.05;
-zGripperOffset = 0.05;
+offsetAfterPick = 0.05; % How far the robot travels upwards after pickng up / putting down the block
+zGripperOffset = 0.05; % How far the block is from the end effector
 
 %Place location of the blocks
 redBlockPos = transl(0,-0.25,0)*trotz(0);
@@ -47,7 +48,7 @@ while programStop == false
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offset,zGripperOffset,vertices, arduinoPort, noEstop, status, simulationMode, L)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offsetAfterPick,zGripperOffset,vertices, arduinoPort, noEstop, status, simulationMode, L)
 
         counter = counter+1;
 
