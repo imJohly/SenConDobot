@@ -6,7 +6,7 @@ function [EndEffectorPos] = DobotFkReal(myRobot,q)
     q2 = q(2);
     q3 = q(3);
     % q4 = q(4);
-    q5 = q(5);
+    q5 = q(5)+q(1);
 
     % Get link values from Dobot
     link1d = myRobot.model.links(1).d;

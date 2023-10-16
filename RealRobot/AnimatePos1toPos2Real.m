@@ -1,13 +1,18 @@
-function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode, loggerFile)
+function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode, loggerFile)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
+
+
 if simulationMode.Sim == true
+
+    mdl_gripper;
 
     q1 = myRobot.model.getpos();
     q2sim = DobotIkReal(myRobot,pos2);
     
     qMatrix = InterpolatedJointAngles(q1,q2sim,steps);
+
     % Variables for the Estop intergration to know when to display strings
     % so it doesnt write it every scan
     first = true;
@@ -23,21 +28,51 @@ if simulationMode.Sim == true
 
         myRobot.model.animate(qMatrix(trajStep,:));
 
+        trNew = DobotFkReal(myRobot,qMatrix(trajStep,:));
+
+            gripperLoc = trNew;
+            Gripper1.base = gripperLoc;
+            Gripper2.base = gripperLoc;
+            Gripper1.animate(Gripper1.getpos);
+            Gripper2.animate(Gripper2.getpos);    
+
         %if block carry is set to 1, move the block as well
         if blockCarry == 1
-            trNew = DobotFkReal(myRobot,qMatrix(trajStep,:));
-            trNew(3,4) = trNew(3,4)-zGripperOffset;
 
-            MoveObject(blockObjects(counter),trNew,vertices)
+            blockTr = trNew;
+            blockTr(3,4) = blockTr(3,4)-zGripperOffset;
 
-        else
+            MoveObject(blockObjects(counter),blockTr,vertices)
 
         end
 
         drawnow();
 
+    end
+
+    if gripper == 1 %gripper close
+        
+        GripperCloseMatrix = flip(GripperOpenMatrix);
+
+        for i = 1:size(GripperCloseMatrix,1)
+
+            Gripper1.animate(GripperCloseMatrix(i,:));
+            Gripper2.animate(GripperCloseMatrix(i,:));
+
+        end
 
     end
+
+    if gripper == 2 %gripper open
+
+        for i = 1:size(GripperOpenMatrix,1)
+
+            Gripper1.animate(GripperOpenMatrix(i,:));
+            Gripper2.animate(GripperOpenMatrix(i,:));
+
+        end
+    end
+
 end
 
     %real robot part
@@ -66,3 +101,4 @@ end
     end
 
 end
+

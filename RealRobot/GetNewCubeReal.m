@@ -26,6 +26,8 @@ function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(c
         
         programStop = true;
 
+        vertices = 0;
+
     else
         %%
         blockInformation(counter,1) = counter;
@@ -34,12 +36,16 @@ function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(c
         
         % Set starting coordinate for the time being
 
-        x_start = 0.25;       
-        y_start = 0;
-        z_start = 0;
-        r_start = 0;
-                                
-        xyzrPos = [x_start,y_start,z_start,r_start];
+        x_min = 0.25;
+        x_max = 0.25;
+        y_min = 0;
+        y_max = 0;
+        z_min = 0;
+        z_max = 0;
+        r_min = -pi/4;
+        r_max = pi/4;
+                               
+        xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max,]);
         
         blockInformation(counter,3:6) = xyzrPos; %Columns 3 to 5 store blocks initial location
         
