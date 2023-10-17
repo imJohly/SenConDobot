@@ -5,6 +5,17 @@ clc
 %% Set Up Logging
 L = log4matlab('Assignment2.log');
 
+%% Set mode: Simulation, Real, Both
+simulationMode = struct('Sim', false, 'Real', false);
+
+simulationMode.Sim = true;
+simulationMode.Real = false;
+
+gripperMode = struct('DH', false, 'Model', false);
+
+gripperMode.DH = false;
+gripperMode.Model = true;
+
 %% Global variables
 
 %Base of the robot (x,y,z),(roll,pitch,yaw)
@@ -19,23 +30,16 @@ gripperSteps = 20;
 offsetAfterPick = 0.05; % How far the robot travels upwards after pickng up / putting down the block
 zGripperOffset = 0.06; % How far the block is from the end effector
 
-%Place location of the blocks
+%Final place location of the blocks
 redBlockPos = transl(0,-0.25,0)*trotz(0);
 blueBlockPos = transl(0,0.25,0)*trotz(0);
 greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 
 %% Set up Estop and sensors
-[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
+[noEstop, status, arduinoPort] = EStopAndSensors('/dev/cu.usbmodem1413101',L);
+%[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
 
-%% Set mode: Simulation, Real, Both
-simulationMode = struct('Sim', false, 'Real', false);
-simulationMode.Sim = true;
-simulationMode.Real = false;
-
-gripperMode = struct('DH', false, 'Model', false);
-gripperMode.DH = false;
-gripperMode.Model = true;
 
 %% Simulation objects
 

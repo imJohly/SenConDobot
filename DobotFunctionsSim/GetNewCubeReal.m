@@ -1,4 +1,4 @@
-function [blockInformation,blockObjects,programStop] = GetNewCube(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
+function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
 %GetNewCube Generates a new cube based on user input and produces and stores relevant values
 
     %% Gets a user input to determine next block
@@ -6,15 +6,15 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
     validInput = false; % Initialize a flag to indicate if the input is valid
     
     while validInput == false
-        userInput = input(['Please enter either r, b, g or x for a red, blue,' ...
-            ' green or random cube. Press e to exit the program.' ...
+        userInput = input(['Please enter either r, b, g for a red, blue,' ...
+            ' or green cube. Press e to exit the program.' ...
             ' Press return to confirm your selection: '], 's'); % 's' specifies string input
         
         % Check if the userInput is one of the valid choices
-        if ismember(userInput, ['r', 'b', 'g', 'x', 'e'])
+        if ismember(userInput, ['r', 'b', 'g', 'e'])
             validInput = true; % Set the flag to true to exit the loop
         else
-            disp('Invalid input. Please enter either r, b, g, x or e.'); % Display an error message
+            disp('Invalid input. Please enter either r, b, g, or e.'); % Display an error message
         end
     end
     
@@ -26,24 +26,26 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
         
         programStop = true;
 
+        vertices = 0;
+
     else
+        %%
+        blockInformation(counter,1) = counter;
+
+        %% Starting coordinate
         
-        %% Random starting coordinate
-        
-        % Define the limits for x, y, z and r.
-        x_min = 0.17;
-        x_max = 0.3;
-        
-        y_min = -0.12;
-        y_max = 0.12;
-        
+        % Set starting coordinate for the time being
+
+        x_min = 0.25;
+        x_max = 0.25;
+        y_min = 0;
+        y_max = 0;
         z_min = 0;
         z_max = 0;
-
         r_min = -pi/4;
         r_max = pi/4;
-                                
-        xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max]); %Custom function to get random coordinates within a limit
+                               
+        xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max,]);
         
         blockInformation(counter,3:6) = xyzrPos; %Columns 3 to 5 store blocks initial location
         
@@ -52,16 +54,9 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
         %2 is blue
         %3 is green
     
-        randNumber = 0;
-    
-        blockHeight = 0.02;
-        
-        if userInput == 'x'
-            randNumber = randsample(3,1); % Assigns random colour if needed
-        end
-        
+        blockHeight = 0.02;        
 
-        if userInput == 'r'|| randNumber == 1
+        if userInput == 'r'
         
             blockInformation(counter,7:9) = [redBlockPos(1,4),redBlockPos(2,4),...
                 redBlockPos(3,4)+((sum(blockInformation(:, 2) == 1))*blockHeight)];
@@ -76,12 +71,7 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
             %places in red cube, stores vertices in column 1 of blockInformation   
             blockObjects(counter) = PlaceObject('RedCube.ply');
 
-             %moves red cube to start position
-            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
-            MoveObject(blockObjects(counter), blockStart)
-        
-
-        elseif userInput == 'b'|| randNumber == 2
+        elseif userInput == 'b'
         
             blockInformation(counter,7:9) = [blueBlockPos(1,4),blueBlockPos(2,4),...
                 blueBlockPos(3,4)+((sum(blockInformation(:, 2) == 2))*blockHeight)];
@@ -94,14 +84,9 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
             blockInformation(counter,2) = 2; %Stores colour in 2nd column
 
             %places in blue cube, stores vertices in column 1 of blockInformation   
-            blockInformation(counter,1) = PlaceObject('BlueCube.ply');
+            blockObjects(counter) = PlaceObject('BlueCube.ply');
 
-            %moves blue cube to start position
-            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
-            MoveObject(blockInformation(counter,1), blockStart)
-        
-
-        elseif userInput == 'g'|| randNumber == 3
+        elseif userInput == 'g'
         
             blockInformation(counter,7:9) = [greenBlockPos(1,4),greenBlockPos(2,4),...
                 greenBlockPos(3,4)+((sum(blockInformation(:, 2) == 3))*blockHeight)];
@@ -114,16 +99,17 @@ function [blockInformation,blockObjects,programStop] = GetNewCube(counter,progra
             blockInformation(counter,2) = 3; %Stores colour in 2nd column
 
             %places in green cube, stores vertices in column 1 of blockInformation   
-            blockInformation(counter,1) = PlaceObject('GreenCube.ply'); 
-
-            %moves green cube to start position
-            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
-            MoveObject(blockInformation(counter,1), blockStart)
+            blockObjects(counter) = PlaceObject('GreenCube.ply');
     
         else
             disp("Warning, an error has occured when attempting to assign block data")
         
         end
+
+            %moves cube to start position
+            vertices = get(blockObjects(counter),'Vertices');
+            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
+            MoveObject(blockObjects(counter), blockStart, vertices)
     
     end
 

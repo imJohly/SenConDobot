@@ -1,0 +1,29 @@
+%% Setup
+rosshutdown
+pause(1);
+rosinit('localhost',11311); 
+buttonSub = rossubscriber('button_state', 'std_msgs/Bool');
+%% Logging set up
+L = log4matlab('AssignmentLog.log');
+
+%% Get Estop data
+buttonData = receive(buttonSub) ;
+isEStopPressed = buttonData.Data;
+
+
+
+while true
+
+isEStopPressed = receive(buttonSub).Data;  % ############# Test if this works in one line
+
+if isEStopPressed
+    %L.mlog = {L.DEBUG,'Assingment1',['E Stop Pressed. Program Aborted']};
+    disp('E Stop Pressed. Program Halted');
+    break
+end
+
+end
+
+
+%% Close logging
+edit('AssignmentLog.log');
