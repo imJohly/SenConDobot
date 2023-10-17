@@ -24,11 +24,10 @@ depthScaleFactor = 2;
 maxCameraDepth   = 10;
 
 while true
-    colourImgMsg = colourCamSub.receive(5);
+    colourImgMsg = colourCamSub.receive(5); 
     colourImg = readImage(colourImgMsg);
-    % positions = detectColor(colourImg, 'r');
-    imshow(colourImg);
-
+    positions = detectColor(colourImg, 'r');
+    
     depthImgMsg = depthCamSub.receive(5);
     depthImg = readImage(depthImgMsg);
 
@@ -36,14 +35,16 @@ while true
     if ~isempty(positions)
         imgX = round(positions(1));
         imgY = round(positions(2));
-        % disp([imgX, imgY])
+        disp('IMAGE XY')
+        disp([imgX, imgY])
         
-        depth = double(depthImg(imgX, imgY));
+        depth = double(depthImg(imgY, imgX));
         
         x = (imgX - intrinsics.PrincipalPoint(1)) * depth / intrinsics.FocalLength(1);
         y = (imgY - intrinsics.PrincipalPoint(2)) * depth / intrinsics.FocalLength(2);
-        z = depth * depthScaleFactor;
+        z = depth;
         
+        disp('3D Position')
         disp([x/1000, y/1000, z/1000]);
     end
 
