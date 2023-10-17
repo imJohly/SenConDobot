@@ -24,14 +24,17 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
         MoveObject(blockObjects(counter), blockStart, vertices)
     end
 
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, startPosOffset,  stepsLong,  0, 0, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start offse 
+    blockCarry = [0,0,1,1,1,0];
+    gripper = [0,1,0,0,2,0];
+    pos2 = [startPosOffset,startPos,startPosOffset,targetPosOffset,targetPos,targetPosOffset];
+    steps = [stepsLong, stepsShort, stepsShort, stepsLong, stepsShort, stepsShort];
+
+    for i = 1:size(blockCarry,2)
+
+        AnimatePos1toPos2Real(myRobot, i, blockObjects, counter, pos2, steps, ...
+            blockCarry, gripper, GripperOpenMatrix, zGripperOffset, vertices, ...
+            arduinoPort, noEstop, status, simulationMode,loggerFile)
+    end
+
+end
     
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, startPos,        stepsShort, 0, 1, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start             gripper clo 
-    
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, startPosOffset,  stepsShort, 1, 0, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start offset      carr 
-    
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, targetPosOffset, stepsLong,  1, 0, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target offset     car 
-    
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, targetPos,       stepsShort, 1, 2, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target,           carry, gripper op 
-    
-    AnimatePos1toPos2Real(myRobot, blockObjects, counter, targetPosOffset, stepsShort, 0, 0, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target offset

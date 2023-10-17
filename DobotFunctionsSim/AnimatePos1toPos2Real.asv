@@ -5,7 +5,7 @@ function [] = AnimatePos1toPos2Real(myRobot, i, blockObjects, counter, pos2, ste
 blockCarry = blockCarry(i);
 gripper = gripper(i);
 pos2 = pos2((4*i)-3:4*i);
-steps = steps(i);
+s
 
 if simulationMode.Sim == true
 
