@@ -68,11 +68,11 @@ counter = 1;
 
 while programStop == false    
 
-    [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
+    [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offsetAfterPick,zGripperOffset,GripperOpenMatrix,vertices, arduinoPort, noEstop, status, simulationMode, L)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offsetAfterPick,zGripperOffset,GripperOpenMatrix, arduinoPort, noEstop, status, simulationMode, L)
 
         counter = counter+1;
 

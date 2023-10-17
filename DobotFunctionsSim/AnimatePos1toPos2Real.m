@@ -1,4 +1,4 @@
-function [] = AnimatePos1toPos2Real(myRobot,blockObjects,counter,pos2,steps,blockCarry, gripper, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode, loggerFile)
+function [] = AnimatePos1toPos2Real(myRobot, blockObjects,counter,pos2,steps,blockCarry, gripper, GripperOpenMatrix, zGripperOffset, vertices, arduinoPort, noEstop, status, simulationMode, loggerFile)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 

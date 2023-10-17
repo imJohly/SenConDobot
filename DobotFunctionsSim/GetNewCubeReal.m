@@ -1,4 +1,4 @@
-function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
+function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
 %GetNewCube Generates a new cube based on user input and produces and stores relevant values
 
     %% Gets a user input to determine next block
@@ -25,8 +25,6 @@ function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(c
     if userInput == 'e'
         
         programStop = true;
-
-        vertices = 0;
 
     else
         %%
@@ -106,10 +104,6 @@ function [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(c
         
         end
 
-            %moves cube to start position
-            vertices = get(blockObjects(counter),'Vertices');
-            blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
-            MoveObject(blockObjects(counter), blockStart, vertices)
     
     end
 
