@@ -36,8 +36,8 @@ function [r,GripperOpenMatrix] = PlotRobotAndGripper(baseTr,gripperMode,gripperS
     
     %Set Gripper on robot
             gripperLoc = DobotFkReal(r,defaultQ);
-            Gripper1.base = gripperLoc;
-            Gripper2.base = gripperLoc;
+            Gripper1.base = gripperLoc * rpy2tr(0,0,pi);
+            Gripper2.base = gripperLoc * rpy2tr(0,0,pi);
             Gripper1.animate(Gripper1.getpos);
             Gripper2.animate(Gripper2.getpos);
     

@@ -34,8 +34,8 @@ if simulationMode.Sim == true
         trNew = DobotFkReal(myRobot,qMatrix(trajStep,:));
 
             gripperLoc = trNew;
-            Gripper1.base = gripperLoc;
-            Gripper2.base = gripperLoc;
+            Gripper1.base = gripperLoc * rpy2tr(0,0,pi);
+            Gripper2.base = gripperLoc * rpy2tr(0,0,pi);
             Gripper1.animate(Gripper1.getpos);
             Gripper2.animate(Gripper2.getpos);    
 

@@ -1,4 +1,4 @@
-function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
+function [pointCloud] = AidanVolume(robot,loadingBar,plotPoints,boundryTrue)
     %profile clear;
     %profile on;
     
@@ -10,18 +10,15 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
     pointCloud = zeros(pointCloudeSize,3);
     z = robot.base().t;
     counter = 1;
-    
+    if loadingBar
+    progressbar = waitbar(0, 'Loading Point Cloud...');
+    end
     for q1 = qlim(1,1):stepRads:qlim(1,2)
         for q2 = qlim(2,1):stepRads:qlim(2,2)
             for q3 = qlim(3,1):stepRads:qlim(3,2)
                 for q4 = qlim(4,1):stepRads:qlim(4,2)
-                    %for q5 = qlim(5,1):stepRads:qlim(5,2)
 
-                        %q2=0;
-                        %q3 = 0;
-                        %q4 = 0;
                         q5 = 0;
-                        %q6 = 0;
                         q = [q1,q2,q3,q4,q5];
 
                         tr = robot.fkineUTS(q);
@@ -35,8 +32,9 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
                         %pointCloud(counter,:) = tr(1:3,4)';
 
                         counter = counter + 1 ;
-
-                    %end
+                        if loadingBar
+                        waitbar(counter / pointCloudeSize, progressbar, sprintf('Loading Point Cloud... %d%%', round(counter / pointCloudeSize * 100)));
+                        end
                 end
             end
         end
@@ -80,7 +78,9 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
     xDiameter = (max_x - min_x)
     yDiameter = (max_y - min_y)
     zDiameter = (max_z - min_z)
-
+    if loadingBar
+    close(progressbar);
+    end
     %profile off;
     %profile viewer;
 end
