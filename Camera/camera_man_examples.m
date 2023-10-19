@@ -3,7 +3,11 @@ clear
 rosshutdown
 rosinit
 
-c = CameraMan();
+% Must set robot frame, setting to zero as irrelevant to examples
+robot_translation = [0, 0, 0];
+robot_rotation = eye(3);
+
+c = CameraMan(robot_translation, robot_rotation);
 
 % subscribers to camera topics
 camInfoSub = rossubscriber("/camera/depth/camera_info", "sensor_msgs/CameraInfo");
@@ -14,7 +18,8 @@ depthImgSub = rossubscriber("/camera/aligned_depth_to_color/image_raw", "sensor_
 % while true
 %     [c.intrinsics, c.colImg, c.depthImg] = update_camera(camInfoSub, colImgSub, depthImgSub);
 %     objects = c.findObjectPosition();
-    
+
+%     % display info
 %     for i = 1:height(objects)
 %         fprintf("%s Positions %i x:%1.2f y:%1.2f z:%1.2f \n", objects(i).col, i, objects(i).position(1), objects(i).position(2), objects(i).position(3));
 %     end
@@ -23,16 +28,19 @@ depthImgSub = rossubscriber("/camera/aligned_depth_to_color/image_raw", "sensor_
 % end
 
 % EXAMPLE: SNAP SHOT
-[c.intrinsics, c.colImg, c.depthImg] = update_camera(camInfoSub, colImgSub, depthImgSub);
+[c.intrinsics, c.colImg, c.depthImg] = updateCamera(camInfoSub, colImgSub, depthImgSub);
 objects = c.findObjectPosition();
 
+% display info
 for i = 1:height(objects)
     fprintf("%s Positions %i x:%1.2f y:%1.2f z:%1.2f \n", objects(i).col, i, objects(i).position(1), objects(i).position(2), objects(i).position(3));
 end
 
 rosshutdown
 
-function [info, col, depth] = update_camera(camInfoSub, colImgSub, depthImgSub)
+function [info, col, depth] = updateCamera(camInfoSub, colImgSub, depthImgSub)
+    %updateCamera receives new ROS messages and updates CameraMan object
+     
     info = camInfoSub.receive();
     col = colImgSub.receive();
     depth = depthImgSub.receive();
