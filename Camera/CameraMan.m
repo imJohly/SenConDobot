@@ -15,9 +15,16 @@ classdef CameraMan
     end
 
     methods
-        function obj = CameraMan()
+        function obj = CameraMan(robot_trans, robot_rot)
+            arguments
+                robot_trans (1, 3) double
+                robot_rot (3, 3) double
+            end
             %CameraMan Constructs an instance of this class
             %   Make sure ROS is initialised before using this class
+
+            obj.robotTrans = robot_trans;
+            obj.robotRot = robot_rot;
         end
 
         function obj = set.intrinsics(obj, in)    
@@ -92,7 +99,9 @@ classdef CameraMan
                 end
             end
         end
+    end
 
+    methods (Access = private)
         function positions = colourDetect(obj, colToDetect, minArea)
             arguments
                 obj
