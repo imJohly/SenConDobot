@@ -5,6 +5,17 @@ clc
 %% Set Up Logging
 L = log4matlab('Assignment2.log');
 
+%% Set mode: Simulation, Real, Both
+simulationMode = struct('Sim', false, 'Real', false);
+
+simulationMode.Sim = true;
+simulationMode.Real = false;
+
+gripperMode = struct('DH', false, 'Model', false);
+
+gripperMode.DH = false;
+gripperMode.Model = true;
+
 %% Global variables
 
 %Base of the robot (x,y,z),(roll,pitch,yaw)
@@ -17,9 +28,9 @@ gripperSteps = 20;
 
 %Fine tune offset of robot above block and distance to gripper
 offsetAfterPick = 0.05; % How far the robot travels upwards after pickng up / putting down the block
-zGripperOffset = 0.05; % How far the block is from the end effector
+zGripperOffset = 0.06; % How far the block is from the end effector
 
-%Place location of the blocks
+%Final place location of the blocks
 redBlockPos = transl(0,-0.25,0)*trotz(0);
 blueBlockPos = transl(0,0.25,0)*trotz(0);
 greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
@@ -28,29 +39,25 @@ greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 %% Set up Estop and sensors
 [noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
 
-%% Set mode: Simulation, Real, Both
-simulationMode = struct('Sim', false, 'Real', false);
-simulationMode.Sim = true;
-simulationMode.Real = false;
-
-gripperMode = struct('DH', false, 'Model', false);
-gripperMode.DH = false;
-gripperMode.Model = true;
 
 %% Simulation objects
 
-if simulationMode.Real == true
+r = Dobot(baseTr);
 
-    r = Dobot(baseTr);
+if simulationMode.Real == true
+    
     clf;
 
 end
 
 if simulationMode.Sim == true
- 
-[r,GripperOpenMatrix,GripperCloseMatrix] = PlotRobotAndGripper(baseTr,gripperMode,gripperSteps);
+
+GripperOpenMatrix = PlotGripper(r,gripperMode,gripperSteps);
 
 end
+
+%% Create point cloud for test point function
+[pointCloud,shp] = DoBotVolume(r,false,true,true);
 
 %%
 
@@ -64,11 +71,11 @@ counter = 1;
 
 while programStop == false    
 
-    [blockInformation,blockObjects,programStop,vertices] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
+    [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
     
     if blockInformation(counter,2) ~= 0
 
-        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offsetAfterPick,zGripperOffset,vertices, arduinoPort, noEstop, status, simulationMode, L)
+        AnimateDobotNewReal(r,blockInformation,blockObjects,counter,stepsLong,stepsShort,offsetAfterPick,zGripperOffset,GripperOpenMatrix, arduinoPort, noEstop, status, simulationMode, L)
 
         counter = counter+1;
 

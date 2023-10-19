@@ -42,21 +42,11 @@ greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 %% Simulation objects
 
-if simulationMode.Real == true
-
-    r = Dobot(baseTr);
-    clf;
-
-end
-
-if simulationMode.Sim == true
- 
-[r,GripperOpenMatrix] = PlotRobotAndGripper(baseTr,gripperMode,gripperSteps);
-
-end
+r = Dobot(baseTr);
+GripperOpenMatrix = PlotGripper(r,gripperMode,gripperSteps);
 
 %% Create point cloud for test point function
-[pointCloud,shp] = DoBotVolume(r.model,false,true,true);
+[pointCloud,shp] = DoBotVolume(r,false,true,true);
 
 %%
 

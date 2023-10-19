@@ -1,4 +1,4 @@
-function [r,GripperOpenMatrix] = PlotGripper(myRobot,gripperMode,gripperSteps)
+function [GripperOpenMatrix] = PlotGripper(r,gripperMode,gripperSteps)
 %UNTITLED10 Summary of this function goes here
 %   Detailed explanation goes here 
 % Simulation Robot
