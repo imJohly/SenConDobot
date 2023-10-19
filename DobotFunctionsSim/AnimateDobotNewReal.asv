@@ -17,19 +17,26 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
     targetPosOffset = targetPos;
     targetPosOffset(3) = targetPosOffset(3) + offsetAfterPick;
 
-    %moves cube to start position
-    vertices = get(blockObjects(counter),'Vertices');
-    blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
-    MoveObject(blockObjects(counter), blockStart, vertices)
+    if simulationMode.Sim == true
+        %moves cube to start position
+        vertices = get(blockObjects(counter),'Vertices');
+        blockStart = transl(blockInformation(counter,3:5))*trotz(blockInformation(counter,6));
+        MoveObject(blockObjects(counter), blockStart, vertices)
+    end
 
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, startPosOffset,  stepsLong,  0, 0, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start offse
+    if 
+
+    blockCarry = [0,0,1,1,1,0];
+    gripper = [0,1,0,0,2,0];
+    pos2 = [startPosOffset,startPos,startPosOffset,targetPosOffset,targetPos,targetPosOffset];
+    steps = [stepsLong, stepsShort, stepsShort, stepsLong, stepsShort, stepsShort];
+
+    for i = 1:size(blockCarry,2)
+
+        AnimatePos1toPos2Real(myRobot, i, blockObjects, counter, pos2, steps, ...
+            blockCarry, gripper, GripperOpenMatrix, zGripperOffset, vertices, ...
+            arduinoPort, noEstop, status, simulationMode,loggerFile)
+    end
+
+end
     
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, startPos,        stepsShort, 0, 1, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start             gripper clos
-   
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, startPosOffset,  stepsShort, 1, 0, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block start offset      carr
-    
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, targetPosOffset, stepsLong,  1, 0, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target offset     carr
-   
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, targetPos,       stepsShort, 1, 2, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target,           carry, gripper ope
-   
-    AnimatePos1toPos2Real(myRobot, blockInformation, blockObjects, counter, targetPosOffset, stepsShort, 0, 0, GripperOpenMatrix, vertices, zGripperOffset, arduinoPort, noEstop, status, simulationMode,loggerFile) %current position to block target offset

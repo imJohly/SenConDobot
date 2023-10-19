@@ -24,6 +24,10 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
         MoveObject(blockObjects(counter), blockStart, vertices)
     end
 
+    if simulationMode.Real == true
+        vertices = 0;
+    end
+
     blockCarry = [0,0,1,1,1,0];
     gripper = [0,1,0,0,2,0];
     pos2 = [startPosOffset,startPos,startPosOffset,targetPosOffset,targetPos,targetPosOffset];

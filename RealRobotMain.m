@@ -58,9 +58,16 @@ blockObjects = zeros(100,1);
 programStop = false;
 counter = 1;
 
+%Gets psotion of all cubes within camera frame
+
+robot_translation = [0, 0, 0];
+robot_rotation = eye(3);
+    
+objects = CameraGetCubes(robot_translation,robot_rotation);
+
 while programStop == false    
 
-    [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
+    [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulationMode, objects, counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos);
     
     if blockInformation(counter,2) ~= 0
 

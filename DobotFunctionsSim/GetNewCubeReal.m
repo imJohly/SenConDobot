@@ -1,51 +1,76 @@
-function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
+function [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulationMode, objects, counter,programStop,blockInformation,blockObjects,redBlockPos,blueBlockPos,greenBlockPos)
 %GetNewCube Generates a new cube based on user input and produces and stores relevant values
 
+    blockInformation(counter,1) = counter;
+    
+
+    if simulationMode.Sim == true
+
     %% Gets a user input to determine next block
+
+        validInput = false; % Initialize a flag to indicate if the input is valid
         
-    validInput = false; % Initialize a flag to indicate if the input is valid
-    
-    while validInput == false
-        userInput = input(['Please enter either r, b, g for a red, blue,' ...
-            ' or green cube. Press e to exit the program.' ...
-            ' Press return to confirm your selection: '], 's'); % 's' specifies string input
-        
-        % Check if the userInput is one of the valid choices
-        if ismember(userInput, ['r', 'b', 'g', 'e'])
-            validInput = true; % Set the flag to true to exit the loop
-        else
-            disp('Invalid input. Please enter either r, b, g, or e.'); % Display an error message
+        while validInput == false
+            userInput = input(['Please enter either r, b, g for a red, blue,' ...
+                ' or green cube. Press e to exit the program.' ...
+                ' Press return to confirm your selection: '], 's'); % 's' specifies string input
+            
+            % Check if the userInput is one of the valid choices
+            if ismember(userInput, ['r', 'b', 'g', 'e'])
+                validInput = true; % Set the flag to true to exit the loop
+            else
+                disp('Invalid input. Please enter either r, b, g, or e.'); % Display an error message
+            end
         end
+        
+        % Now, you can use the valid userInput
+        disp(['You selected: ' userInput]);
+        
+    
+        if userInput == 'e'
+            
+            programStop = true;
+    
+        else
+    
+    
+            %% Starting coordinate
+    
+                % Set starting coordinate for the time being
+        
+                x_min = 0.25;
+                x_max = 0.25;
+                y_min = 0;
+                y_max = 0;
+                z_min = 0;
+                z_max = 0;
+                r_min = -pi/4;
+                r_max = pi/4;
+                                       
+                xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max,]);
+                
+                blockInformation(counter,3:6) = xyzrPos; %Columns 3 to 5 store blocks initial location
+    
+        end
+
     end
-    
-    % Now, you can use the valid userInput
-    disp(['You selected: ' userInput]);
-    
 
-    if userInput == 'e'
+    if simulationMode.Real == true
+
+        colour = objects(counter).col;
+        userInput = colour;
+
+        xyzPos = objects(counter).position;
+        blockInformation(counter,3:5) = xyzPos;  
+
+        if counter > objects.length
+
+            programStop = true;
+
+        end
+
+    end
         
-        programStop = true;
-
-    else
-        %%
-        blockInformation(counter,1) = counter;
-
-        %% Starting coordinate
-        
-        % Set starting coordinate for the time being
-
-        x_min = 0.25;
-        x_max = 0.25;
-        y_min = 0;
-        y_max = 0;
-        z_min = 0;
-        z_max = 0;
-        r_min = -pi/4;
-        r_max = pi/4;
-                               
-        xyzrPos = RandCoordinates([x_min,x_max,y_min,y_max,z_min,z_max,r_min,r_max,]);
-        
-        blockInformation(counter,3:6) = xyzrPos; %Columns 3 to 5 store blocks initial location
         
         %% Colour ID and target location
         %1 is red
@@ -66,8 +91,12 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,pr
     
             blockInformation(counter,2) = 1; %Stores colour in 2nd column
 
-            %places in red cube, stores vertices in column 1 of blockInformation   
-            blockObjects(counter) = PlaceObject('RedCube.ply');
+            if simulationMode.Sim == true
+
+                %places in red cube, stores vertices in column 1 of blockInformation   
+                blockObjects(counter) = PlaceObject('RedCube.ply');
+
+            end
 
         elseif userInput == 'b'
         
@@ -81,8 +110,12 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,pr
     
             blockInformation(counter,2) = 2; %Stores colour in 2nd column
 
-            %places in blue cube, stores vertices in column 1 of blockInformation   
-            blockObjects(counter) = PlaceObject('BlueCube.ply');
+            if simulationMode.Sim == true
+
+                %places in blue cube, stores vertices in column 1 of blockInformation   
+                blockObjects(counter) = PlaceObject('BlueCube.ply');
+
+            end
 
         elseif userInput == 'g'
         
@@ -96,8 +129,12 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,pr
     
             blockInformation(counter,2) = 3; %Stores colour in 2nd column
 
-            %places in green cube, stores vertices in column 1 of blockInformation   
-            blockObjects(counter) = PlaceObject('GreenCube.ply');
+            if simulationMode.Sim == true
+
+                %places in green cube, stores vertices in column 1 of blockInformation   
+                blockObjects(counter) = PlaceObject('GreenCube.ply');
+
+            end
     
         else
             disp("Warning, an error has occured when attempting to assign block data")
@@ -105,6 +142,6 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(counter,pr
         end
 
     
-    end
-
 end
+
+
