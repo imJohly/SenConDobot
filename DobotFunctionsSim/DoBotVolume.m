@@ -1,27 +1,26 @@
-function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
+function [pointCloud,shp] = DoBotVolume(robot,loadingBar,plotPoints,boundryTrue)
     %profile clear;
     %profile on;
     
-    stepDeg = 10;
+    stepDeg = 5;
     stepRads = deg2rad(stepDeg);
     qlim = robot.qlim;
     % Precalculate Point Cloud Size
-    pointCloudeSize = prod(floor((qlim(1:4,2)-qlim(1:4,1))/stepRads + 1));
+    
+    pointCloudeSize = 7481; %hard coded value as hard to do calculation when the limits are variable
+    %prod(floor((qlim(1:3,2)-qlim(1:3,1))/stepRads + 1))
     pointCloud = zeros(pointCloudeSize,3);
     z = robot.base().t;
     counter = 1;
-    
+    if loadingBar
+    progressbar = waitbar(0, 'Loading Point Cloud...');
+    end
     for q1 = qlim(1,1):stepRads:qlim(1,2)
         for q2 = qlim(2,1):stepRads:qlim(2,2)
-            for q3 = qlim(3,1):stepRads:qlim(3,2)
-                for q4 = qlim(4,1):stepRads:qlim(4,2)
-                    %for q5 = qlim(5,1):stepRads:qlim(5,2)
+            for q3 = (pi/2 - q2):stepRads:qlim(3,2)
 
-                        %q2=0;
-                        %q3 = 0;
-                        %q4 = 0;
+                        q4 = pi - q2 - q3;
                         q5 = 0;
-                        %q6 = 0;
                         q = [q1,q2,q3,q4,q5];
 
                         tr = robot.fkineUTS(q);
@@ -36,24 +35,35 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
 
                         counter = counter + 1 ;
 
-                    %end
-                end
+                        if loadingBar
+                        waitbar(counter / pointCloudeSize, progressbar, sprintf('Loading Point Cloud... %d%%', round(counter / pointCloudeSize * 100)));
+                        end
+
             end
         end
     end
-    
+
+    alpha = 0.06;
+    shp = alphaShape(pointCloud, alpha);
+    workingVolume = volume(shp)
+
     if plotPoints
         if boundryTrue
-            k = boundary(pointCloud);
-            trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
+            % k = boundary(pointCloud);
+            % trisurf(k,pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'Facecolor','red','FaceAlpha',0.1)
+
+            plot(shp);
 
         else
             plot3(pointCloud(:,1),pointCloud(:,2),pointCloud(:,3),'r.');
         end
     end
     [k,av] = convhull(pointCloud);
-    volume = av
+    workSpaceVolume = av
     counter
+
+
+
 
     min_x = min(pointCloud(:, 1));
     max_x = max(pointCloud(:, 1));
@@ -71,7 +81,9 @@ function [pointCloud] = AidanVolume(robot,plotPoints,boundryTrue)
     xDiameter = (max_x - min_x)
     yDiameter = (max_y - min_y)
     zDiameter = (max_z - min_z)
-
+    if loadingBar
+    close(progressbar);
+    end
     %profile off;
     %profile viewer;
 end

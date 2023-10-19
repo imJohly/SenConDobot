@@ -38,8 +38,6 @@ greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 %% Set up Estop and sensors
 [noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
-%[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
-
 
 
 %% Simulation objects
@@ -58,8 +56,8 @@ if simulationMode.Sim == true
 end
 
 %% Create point cloud for test point function
-pointCloud = AidanVolume(r.model,false,false,false);
-shp = alphaShape(pointCloud, 0.06);
+[pointCloud,shp] = DoBotVolume(r.model,false,true,true);
+
 %%
 
 blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
