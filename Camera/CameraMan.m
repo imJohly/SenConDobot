@@ -4,100 +4,114 @@ classdef CameraMan
     %   a realsense2 camera.
 
     properties
-        % Depth Camera Info
-        camInfoSub
-        intrinsics
+        objPositions = [];                          % Stores detected object positions
 
-        % Colour image
-        colImgSub
-        colourImg
-        
-        % Depth image
-        depthImgSub
-        depthImg
+        intrinsics = [];                            % Stores camera intrinsics
+        colImg = [];                                % Stores colour image from camera
+        depthImg = [];                              % Stores depth image from camera 
+
+        robotTrans = [268.2, 0, 250];               % Robot Translation ... from camera/origin
+        robotRot = [1, 0, 0; 0, 1, 0; 0, 0, 1];     % Robot Rotation ... from camera/origin
     end
 
     methods
         function obj = CameraMan()
-            %CameraMan Construct an instance of this class
-            %   Ensure ros is initialised before instantiating class
-
-            obj.intrinsics = [];
-            obj.colourImg = [];
-            obj.depthImg = [];
-
-            % Subscribe to camera topics
-            obj.camInfoSub = rossubscriber("/camera/depth/camera_info", @obj.cameraInfoCallback);
-            obj.colImgSub = rossubscriber("/camera/color/image_raw", @obj.colourImageCallback);
-            obj.depthImgSub = rossubscriber("/camera/depth/image_rect_raw", @obj.depthImageCallback);
-
-            % obj.start_camera()
+            %CameraMan Constructs an instance of this class
+            %   Make sure ROS is initialised before using this class
         end
 
-        function obj = cameraInfoCallback(obj, src, msg)    
-            %cameraInfoCallback Callback function for rostopic /camera/depth/camera_info
+        function obj = set.intrinsics(obj, in)    
+            %cameraInfoCallback Setter function for camera intrinsics
             %   Extracts intrinsic parameters from the depth camera and
             %   stores them as class properties.
 
             % Reshape camera intrinsic matrix
-            K = reshape(msg.K, [3, 3])';
+            K = reshape(in.K, [3, 3])';
 
             % Extract the camera intrinsic parameters
-            focalLength = [K(1, 1), K(2, 2)]; % Focal length in y-direction
-            principalPoint = [K(1, 3), K(2, 3)]; % Principal point y-coordinate
-            imageSize = [double(msg.Height), double(msg.Width)];
+            focalLength     = [K(1, 1), K(2, 2)];
+            principalPoint  = [K(1, 3), K(2, 3)];
+            imageSize       = [double(in.Height), double(in.Width)];
             
             % store in class properties
             obj.intrinsics = cameraIntrinsics(focalLength, principalPoint, imageSize);
         end
 
-        function obj = colourImageCallback(obj, src, msg)
-            %colourImageCallback Callback function for incoming colour images
-            obj.colourImg = readImage(msg);
+        function obj = set.colImg(obj, in)
+            %colourImageCallback Setter function for incoming colour image messages
+            obj.colImg = readImage(in);
         end
 
-        function obj = depthImageCallback(obj, src, msg)
-            %depthImageCallback Callback function for incoming depth images
-
-            disp(msg)
-
-            obj.depthImg = readImage(msg);
+        function obj = set.depthImg(obj, in)
+            %depthImageCallback Setter function for incoming depth image messages
+            obj.depthImg = readImage(in);
         end
 
-        function obj = camera_update(obj)
-            if isempty(obj.colourImg)
-                return
+        function positions = findObjectPosition(obj)
+            %findObjectPosition Finds RGB object's relative 3D position
+            %   Returns an array of structs for object colour and position
+
+            positions = [];
+
+            % Loop to check for RGB
+            for c = 1:3
+
+                check = '';
+                switch c
+                    case 1
+                        check = 'r';
+                    case 2
+                        check = 'g';
+                    case 3
+                        check = 'b';
+                end
+
+                % detect RGB objects
+                pixelPos = obj.colourDetect(check);
+
+                for i = 1:height(pixelPos)
+                    if ~isempty(pixelPos)
+                        
+                        % Get pixel coordinates
+                        imgX = round(pixelPos(i, 1));
+                        imgY = round(pixelPos(i, 2));
+
+                        % Convert pixel coords to 3D position
+                        thisPosition = obj.pixel2Position([imgX, imgY]);
+
+                        classyPosition = struct('col', 'position'); % A catagorised structure for positions
+                        classyPosition.col = check;
+                        classyPosition.position = thisPosition;
+
+                        positions = [positions; classyPosition];
+                    end
+                end
             end
-
-            % detect RGB objects
-            positions = obj.colourDetect('r');
-            % imshow(obj.colourImg);
-
-            if ~isempty(positions)
-                imgX = round(positions(1));
-                imgY = round(positions(2));
-
-                [x, y, z] = obj.pixel2Position([imgX, imgY]);
-
-                disp([x, y, z]);
-            end
-
-            drawnow
-            pause(0.01);
         end
 
-        function positions = colourDetect(obj, colToDetect)
+        function positions = colourDetect(obj, colToDetect, minArea)
+            arguments
+                obj
+                colToDetect (1, 1) string
+                % debugging   (1, 1) boolean = false
+                minArea     (1, 1) int32   = 1000
+            end
             %colourDetect Gets an image from cameraSub and detects the colour
             %   This function gets an image from cameraSub and detects the
-            %   colour chosen in parameter colToDetect. It returns an array of the
-            %   pixel position of the coloured region.
+            %   colour chosen in parameter colToDetect.
+            % 
+            %   Returns an array of the pixel position of the coloured region.
 
-            minArea = 1000;
-            img = imread(obj.colourImg);
-
-            colourMask = [];
-
+            % Returns nothing is there's no colour image
+            if isempty(obj.colImg)
+                positions = [];
+                disp('no image');
+                return
+            end
+            
             % create a colour mask depending on which colour needs to be detected
+            img = obj.colImg;
+            colourMask = [];
             switch colToDetect
                 case 'r'
                     colourMask = createRedMask(img);
@@ -107,18 +121,21 @@ classdef CameraMan
                     colourMask = createBlueMask(img);
             end
 
-            % dilate region to improve region area
+            % dilate region to merge noisy regions
             se = strel('square', 20);
             colourDilated = imdilate(colourMask, se);
 
             % calculate colour regions
             colourRegions = regionprops(colourDilated, 'Area', 'Centroid', 'BoundingBox');
-
-            centroids = [];
-
+            
+            
+            imshow(obj.colImg);
+            hold on;
+            
             % loop through regions and keep regions greater than minimum area.
-            for i = 1:numel(stats)
-                area = stats(i).Area;
+            centroids = [];
+            for i = 1:numel(colourRegions)
+                area = colourRegions(i).Area;
                 if area >= minArea
                     % If the region meets the area threshold, save its centroid
                     centroids = [centroids; colourRegions(i).Centroid];
@@ -127,22 +144,76 @@ classdef CameraMan
                 end
             end
 
+            hold off;
+
             positions = centroids;
         end
 
-        function [x, y, z] = pixel2Position(obj, pixelPosition)
+        function position = convert2RobotFrame(obj, rel_transform)
+            arguments
+                obj
+                rel_transform (4, 4) double
+            end
+            %convert2RobotFRame converts rel_transform to robot frame
+            %   This function takes a relative transform and converts its to
+            %   the robot transform frame.
+            % 
+            %   This done simply through b * inv(A),
+            %   where:
+            %       - A is the source frame
+            %       - b is the target frame
+            % 
+            %   rel_transform and robot_frame is in the form of
+            %       | 1 0 0 x |
+            %       | 0 1 0 y |
+            %       | 0 0 1 z |
+            %       | 0 0 0 1 |
+            % 
+            %   Returns a vector array of the transformed position
+
+            robot_frame = eye(4);                       % assume default rotation
+            robot_frame(1:3, 1:3) = obj.robotRot;
+            robot_frame(1:3, 4) = obj.robotTrans;
+            
+            tf = rel_transform / robot_frame;
+            position = tf(1:3, 4);
+        end
+
+        function position = pixel2Position(obj, pixelPosition)
+            arguments
+                obj
+                pixelPosition (1, 2) double
+            end
             %pixel2Position Converts a given pixelPosition into a 3D point relative to the camera
+            %   This function takes in a pixel position based on the colour
+            %   image from the camera and converts it to a 3D translation
+            %   relative to the camera.
+            % 
+            %   The main formulas are,
+            %   x = (ix - cx) * (z / fx)
+            %   y = (iy - cy) * (z / fy)
+            % 
+            %   Returns a vector array of the calculated position
+
+            % Returns nothing is there's no depth image
+            if isempty(obj.depthImg)
+                disp('WARNING! No depth image found!')
+                position = [];
+                return
+            end
 
             ix = pixelPosition(1);
             iy = pixelPosition(2);
 
             % Grab depth value from pixel point
-            depth = double(depthImage(ix, iy));
-        
-            % Calculate the 3d relative position
-            x = (ix - obj.intrinsics.PrincipalPoint(1)) * depth / obj.intrinsics.FocalLength(1);
-            y = (iy - obj.intrinsics.PrincipalPoint(2)) * depth / obj.intrinsics.FocalLength(2);
-            z = depth;
+            depth = double(obj.depthImg(iy, ix));
+            
+            % Calculate the 3d relative position, scaled to metres
+            x = (ix - obj.intrinsics.PrincipalPoint(1)) * depth / obj.intrinsics.FocalLength(1) / 1000;
+            y = (iy - obj.intrinsics.PrincipalPoint(2)) * depth / obj.intrinsics.FocalLength(2) / 1000;
+            z = depth / 1000;
+
+            position = [x, y, z];
         end
     end
 end

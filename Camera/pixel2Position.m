@@ -1,3 +1,5 @@
+% ALREADY MOVED TO CLASS
+
 function [x, y, z] = pixel2Position(pixelPosition, depthImage, cameraIntrinsics)
 
     depth = double(depthImage(pixelPosition(2), pixelPosition(1)));

@@ -8,7 +8,7 @@ rosinit
 infoSub = rossubscriber("/camera/depth/camera_info");
 
 % Subscribes to Color and Depth data from camera
-depthCamSub = rossubscriber("/camera/depth/image_rect_raw", "sensor_msgs/Image");
+depthCamSub = rossubscriber("/camera/aligned_depth_to_color/image_raw", "sensor_msgs/Image");
 colourCamSub = rossubscriber("/camera/color/image_raw", "sensor_msgs/Image");
 
 infoMsg = infoSub.receive();
@@ -38,14 +38,20 @@ while true
         disp('IMAGE XY')
         disp([imgX, imgY])
         
-        depth = double(depthImg(imgY, imgX));
+        % depth = double(depthImg(imgY, imgX));
         
-        x = (imgX - intrinsics.PrincipalPoint(1)) * depth / intrinsics.FocalLength(1);
-        y = (imgY - intrinsics.PrincipalPoint(2)) * depth / intrinsics.FocalLength(2);
-        z = depth;
+        % % % debug - shows where its checking position
+        % % imshow(colourImg);
+        % % hold on
+        % % plot(imgX, imgY, "Marker", 'o', 'MarkerSize', 10, 'Color', 'b');
+        % % hold off
+       
+        % x = (imgX - intrinsics.PrincipalPoint(1)) * depth / intrinsics.FocalLength(1);
+        % y = (imgY - intrinsics.PrincipalPoint(2)) * depth / intrinsics.FocalLength(2);
+        % z = depth;
         
-        disp('3D Position')
-        disp([x/1000, y/1000, z/1000]);
+        % disp('3D Position')
+        % disp([x/1000, y/1000, z/1000]);
     end
 
     drawnow

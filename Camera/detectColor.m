@@ -1,3 +1,5 @@
+% ALREADY MOVED TO CLASS
+
 function positions = detectColor(image, colToDetect)
     minArea = 1000;
     
