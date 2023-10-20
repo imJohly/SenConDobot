@@ -4,7 +4,7 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulation
     blockInformation(counter,1) = counter;
     
 
-    if simulationMode.Sim == true
+    if (simulationMode.Sim && ~simulationMode.Real)
 
     %% Gets a user input to determine next block
 
