@@ -64,7 +64,7 @@ counter = 1;
 
 %Gets psotion of all cubes within camera frame
 
-robot_translation = [0.25, 0.28, -0.27 + 0.05];
+robot_translation = [0, 0.28, -0.27 + 0.05];
 rot = rpy2tr(pi, 0, 0);
 robot_rotation = rot(1:3, 1:3);
 
