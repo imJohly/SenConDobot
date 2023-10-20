@@ -93,6 +93,7 @@ end
     first = true;
     held = false;
     lightCurtainSafe = true;
+    % check estop status
          if ~noEstop
             ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
          end
