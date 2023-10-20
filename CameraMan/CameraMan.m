@@ -23,8 +23,8 @@ classdef CameraMan
             %CameraMan Constructs an instance of this class
             %   Make sure ROS is initialised before using this class
 
-            obj.robotTrans = robot_trans
-            obj.robotRot = robot_rot
+            obj.robotTrans = robot_trans;
+            obj.robotRot = robot_rot;
         end
 
         function obj = set.intrinsics(obj, in)    
@@ -184,18 +184,19 @@ classdef CameraMan
             % 
             %   Returns a vector array of the transformed position
 
-            obj.robotRot
-            obj.robotTrans
-
             robot_frame = eye(4);                       % assume default rotation
             robot_frame(1:3, 1:3) = obj.robotRot;
             robot_frame(1:3, 4) = obj.robotTrans;
-            
-            rel_transform
-            robot_frame
 
             tf = rel_transform / robot_frame;
             position = tf(1:3, 4);
+
+            % swap axis
+            x = position(1)
+            y = position(2)
+
+            position(1) = y
+            position(2) = x
         end
 
         function position = pixel2Position(obj, pixelPosition)

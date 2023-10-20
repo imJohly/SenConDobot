@@ -4,8 +4,9 @@ rosshutdown
 rosinit
 
 % Must set robot frame, setting to zero as irrelevant to examples
-robot_translation = [0, 0, 0];
-robot_rotation = eye(3);
+robot_translation = [0, 0.28, -0.23];
+rot = rpy2tr(pi, 0, pi);
+robot_rotation = rot(1:3, 1:3);
 
 c = CameraMan(robot_translation, robot_rotation);
 

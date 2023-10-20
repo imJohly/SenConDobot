@@ -54,8 +54,6 @@ GripperOpenMatrix = PlotGripper(r,gripperMode,gripperSteps);
 %% Create point cloud for test point function
 [pointCloud,shp] = DoBotVolume(r,false,false,false);
 
-%%
-
 blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
 %blockInformation = [block_no.,block_colour, x_start, y_start, z_start, z_rot_start, x_end, y_end, z_end, z_rot_end]
 %^ Shows what values are stored in each row from 1 to 9.
@@ -66,11 +64,20 @@ counter = 1;
 
 %Gets psotion of all cubes within camera frame
 
-robot_translation = [0, 0.28, -0.28];
+robot_translation = [0.25, 0.28, -0.27 + 0.05];
 rot = rpy2tr(pi, 0, 0);
 robot_rotation = rot(1:3, 1:3);
-    
-objects = CameraGetCubes(robot_translation, robot_rotation);
+
+objects = 0;
+
+if simulationMode.Real
+    objects = CameraGetCubes(robot_translation, robot_rotation);
+    ControlGripperRealRobot(true);
+    MoveRealRobot([pi/4,pi/4,0,0]);
+
+end
+
+
 
 while programStop == false    
 
