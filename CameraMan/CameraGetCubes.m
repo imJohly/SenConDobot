@@ -15,4 +15,8 @@ function [objects] = CameraGetCubes(robot_translation, robot_rotation)
     c.depthImg = depthImgSub.receive();
     objects = c.findObjectPosition();
     
+    % display info
+    for i = 1:height(objects)
+        fprintf("%s Positions %i x:%1.2f y:%1.2f z:%1.2f \n", objects(i).col, i, objects(i).position(1), objects(i).position(2), objects(i).position(3));
+    end
 end

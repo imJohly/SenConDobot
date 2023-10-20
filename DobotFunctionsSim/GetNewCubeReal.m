@@ -63,7 +63,7 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulation
         xyzPos = objects(counter).position;
         blockInformation(counter,3:5) = xyzPos;  
 
-        if counter > objects.length
+        if counter > length(objects)
 
             programStop = true;
 

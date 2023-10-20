@@ -8,8 +8,8 @@ L = log4matlab('Assignment2.log');
 %% Set mode: Simulation, Real, Both
 simulationMode = struct('Sim', false, 'Real', false);
 
-simulationMode.Sim = true;
-simulationMode.Real = false;
+simulationMode.Sim = false;
+simulationMode.Real = true;
 
 gripperMode = struct('DH', false, 'Model', false);
 
@@ -19,6 +19,7 @@ gripperMode.Model = true;
 
 if simulationMode.Real == true;
     rosshutdown
+    pause(2)
     rosinit
 end
 %% Global variables
@@ -51,7 +52,7 @@ r = Dobot(baseTr);
 GripperOpenMatrix = PlotGripper(r,gripperMode,gripperSteps);
 
 %% Create point cloud for test point function
-[pointCloud,shp] = DoBotVolume(r,false,true,true);
+[pointCloud,shp] = DoBotVolume(r,false,false,false);
 
 %%
 
@@ -65,10 +66,11 @@ counter = 1;
 
 %Gets psotion of all cubes within camera frame
 
-robot_translation = [0, 0, 0];
-robot_rotation = eye(3);
+robot_translation = [0, 0.28, -0.28];
+rot = rpy2tr(pi, 0, 0);
+robot_rotation = rot(1:3, 1:3);
     
-objects = CameraGetCubes(robot_translation,robot_rotation);
+objects = CameraGetCubes(robot_translation, robot_rotation);
 
 while programStop == false    
 

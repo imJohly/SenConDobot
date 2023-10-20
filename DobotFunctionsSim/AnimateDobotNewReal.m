@@ -26,6 +26,8 @@ function [] = AnimateDobotNewReal(myRobot, blockInformation, blockObjects, count
 
     if simulationMode.Real == true
         vertices = 0;
+        ControlGripperRealRobot(true);
+        MoveRealRobot(myRobot.defaultRealQ(1:4));
     end
 
     blockCarry = [0,0,1,1,1,0];

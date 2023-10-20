@@ -10,7 +10,7 @@ classdef CameraMan
         colImg = [];                                % Stores colour image from camera
         depthImg = [];                              % Stores depth image from camera 
 
-        robotTrans = [268.2, 0, 250];               % Robot Translation ... from camera/origin
+        robotTrans = [0, 0, 0];               % Robot Translation ... from camera/origin
         robotRot = [1, 0, 0; 0, 1, 0; 0, 0, 1];     % Robot Rotation ... from camera/origin
     end
 
@@ -23,8 +23,8 @@ classdef CameraMan
             %CameraMan Constructs an instance of this class
             %   Make sure ROS is initialised before using this class
 
-            obj.robotTrans = robot_trans;
-            obj.robotRot = robot_rot;
+            obj.robotTrans = robot_trans
+            obj.robotRot = robot_rot
         end
 
         function obj = set.intrinsics(obj, in)    
@@ -89,10 +89,15 @@ classdef CameraMan
 
                         % Convert pixel coords to 3D position
                         thisPosition = obj.pixel2Position([imgX, imgY]);
+                        thisTransform = eye(4);
+                        thisTransform(1, 4) = thisPosition(1);
+                        thisTransform(2, 4) = thisPosition(2);
+                        thisTransform(3, 4) = thisPosition(3);
 
                         classyPosition = struct('col', 'position'); % A catagorised structure for positions
                         classyPosition.col = check;
-                        classyPosition.position = thisPosition;
+                        classyPosition.position = obj.convert2RobotFrame(thisTransform);
+                        
 
                         positions = [positions; classyPosition];
                     end
@@ -158,10 +163,10 @@ classdef CameraMan
         end
 
         function position = convert2RobotFrame(obj, rel_transform)
-            arguments
-                obj
-                rel_transform (4, 4) double
-            end
+            % arguments
+            %     obj
+            %     rel_transform (4, 4) double
+            % end
             %convert2RobotFRame converts rel_transform to robot frame
             %   This function takes a relative transform and converts its to
             %   the robot transform frame.
@@ -179,10 +184,16 @@ classdef CameraMan
             % 
             %   Returns a vector array of the transformed position
 
+            obj.robotRot
+            obj.robotTrans
+
             robot_frame = eye(4);                       % assume default rotation
             robot_frame(1:3, 1:3) = obj.robotRot;
             robot_frame(1:3, 4) = obj.robotTrans;
             
+            rel_transform
+            robot_frame
+
             tf = rel_transform / robot_frame;
             position = tf(1:3, 4);
         end
