@@ -16,6 +16,11 @@ gripperMode = struct('DH', false, 'Model', false);
 gripperMode.DH = false;
 gripperMode.Model = true;
 
+
+if simulationMode.Real == true;
+    rosshutdown
+    rosinit
+end
 %% Global variables
 
 %Base of the robot (x,y,z),(roll,pitch,yaw)

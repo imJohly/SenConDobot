@@ -81,7 +81,7 @@ end
     %real robot part
     if simulationMode.Real == true
 
-        z_difference_sim_vs_real = -0.02;
+        z_difference_sim_vs_real = 0.06;
 
         realpos2 = pos2;
         realpos2(3) = realpos2(3) + z_difference_sim_vs_real;
