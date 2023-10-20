@@ -1,8 +1,8 @@
 function [] = ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
 
-sysStatus = read(arduinoPort, 2, "char") %read the estop data
-eStopStatus = sysStatus(1)
-lightCurtainStatus = sysStatus(2)
+sysStatus = read(arduinoPort, 2, "char"); %read the estop data
+eStopStatus = sysStatus(1);
+lightCurtainStatus = sysStatus(2);
 lightCurtainSafe = true; %set the lightcurtian varaible back to safe
 % if estop is pushed wait
 while ~strcmp(eStopStatus,status.Running)   %if the estop data is the stopped state wait for the estop

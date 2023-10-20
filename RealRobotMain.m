@@ -8,8 +8,8 @@ L = log4matlab('Assignment2.log');
 %% Set mode: Simulation, Real, Both
 simulationMode = struct('Sim', false, 'Real', false);
 
-simulationMode.Sim = false;
-simulationMode.Real = true;
+simulationMode.Sim = true;
+simulationMode.Real = false;
 
 gripperMode = struct('DH', false, 'Model', false);
 
