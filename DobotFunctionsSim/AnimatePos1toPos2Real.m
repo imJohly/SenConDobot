@@ -26,7 +26,7 @@ if simulationMode.Sim == true
 
         % check if there is an estop connected to the system
         if ~noEstop
-            ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe)
+            ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
          end
 
         myRobot.model.animate(qMatrix(trajStep,:));
@@ -90,17 +90,27 @@ end
 
         q2real = myRobot.ModelQToRealQ(q2RealSim);
 
-        MoveRealRobot(q2real)
+    first = true;
+    held = false;
+    lightCurtainSafe = true;
+         if ~noEstop
+            ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
+         end
+
+            MoveRealRobot(q2real,noEstop,arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode);
 
         if gripper == 1
 
-            ControlGripperRealRobot(false)
+            ControlGripperRealRobot(false);
 
         elseif gripper == 2
 
-            ControlGripperRealRobot(true)
+            ControlGripperRealRobot(true);
+
 
         end
+
+        
     end
 
 end

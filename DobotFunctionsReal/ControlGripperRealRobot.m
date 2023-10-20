@@ -21,7 +21,7 @@ end
 
 toolStateSubscriber = rossubscriber('/dobot_magician/tool_state');
 pause(1); %Allow some time for MATLAB to start the subscriber
-currentToolState = toolStateSubscriber.LatestMessage.Data
+currentToolState = toolStateSubscriber.LatestMessage.Data;
 
 end
 

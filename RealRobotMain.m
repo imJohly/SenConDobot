@@ -43,7 +43,7 @@ greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 
 %% Set up Estop and sensors
-[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
+[noEstop, status, arduinoPort] = EStopAndSensors('/dev/ttyACM0',L);
 
 
 %% Simulation objects
@@ -64,16 +64,21 @@ counter = 1;
 
 %Gets psotion of all cubes within camera frame
 
-robot_translation = [0, 0.28, -0.27 + 0.05];
+robot_translation = [-0.012, 0.28, -0.27 + 0.043];
 rot = rpy2tr(pi, 0, 0);
 robot_rotation = rot(1:3, 1:3);
 
 objects = 0;
 
 if simulationMode.Real
+    
     objects = CameraGetCubes(robot_translation, robot_rotation);
     ControlGripperRealRobot(true);
-    MoveRealRobot([pi/4,pi/4,0,0]);
+        % so it doesnt write it every scan
+    first = true;
+    held = false;
+    lightCurtainSafe = true;
+    MoveRealRobot([-pi/4,pi/4,0,0],noEstop,arduinoPort, status, L,first,held,lightCurtainSafe,simulationMode);
 
 end
 

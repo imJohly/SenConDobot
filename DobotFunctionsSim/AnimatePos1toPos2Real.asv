@@ -34,8 +34,8 @@ if simulationMode.Sim == true
         trNew = DobotFkReal(myRobot,qMatrix(trajStep,:));
 
             gripperLoc = trNew;
-            Gripper1.base = gripperLoc;
-            Gripper2.base = gripperLoc;
+            Gripper1.base = gripperLoc * rpy2tr(0,0,pi);
+            Gripper2.base = gripperLoc * rpy2tr(0,0,pi);
             Gripper1.animate(Gripper1.getpos);
             Gripper2.animate(Gripper2.getpos);    
 
@@ -81,7 +81,7 @@ end
     %real robot part
     if simulationMode.Real == true
 
-        z_difference_sim_vs_real = -0.02;
+        z_difference_sim_vs_real = 0.00;
 
         realpos2 = pos2;
         realpos2(3) = realpos2(3) + z_difference_sim_vs_real;
@@ -99,6 +99,12 @@ end
         elseif gripper == 2
 
             ControlGripperRealRobot(true)
+            % check for estop status if not at current joint
+        while GetJointStatesRealRobot ~= q2real
+         if ~noEstop
+            ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe)
+         end
+        end
 
         end
     end

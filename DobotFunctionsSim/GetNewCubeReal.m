@@ -2,6 +2,8 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulation
 %GetNewCube Generates a new cube based on user input and produces and stores relevant values
 
     blockInformation(counter,1) = counter;
+
+    userInput = 0;
     
 
     if (simulationMode.Sim && ~simulationMode.Real)
@@ -57,17 +59,21 @@ function [blockInformation,blockObjects,programStop] = GetNewCubeReal(simulation
 
     if simulationMode.Real == true
 
+        if counter > length(objects)
+
+            programStop = true;
+
+        else
+
         colour = objects(counter).col;
         userInput = colour;
 
         xyzPos = objects(counter).position;
         blockInformation(counter,3:5) = xyzPos;  
-
-        if counter > length(objects)
-
-            programStop = true;
-
+        
         end
+
+
 
     end
         
