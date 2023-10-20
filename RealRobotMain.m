@@ -17,7 +17,7 @@ gripperMode.DH = false;
 gripperMode.Model = true;
 
 
-if simulationMode.Real == true;
+if simulationMode.Real == true
     rosshutdown
     pause(2)
     rosinit
@@ -76,8 +76,6 @@ if simulationMode.Real
     MoveRealRobot([pi/4,pi/4,0,0]);
 
 end
-
-
 
 while programStop == false    
 
