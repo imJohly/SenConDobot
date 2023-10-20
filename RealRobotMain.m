@@ -17,7 +17,7 @@ gripperMode.DH = false;
 gripperMode.Model = true;
 
 
-if simulationMode.Real == true;
+if simulationMode.Real == true
     rosshutdown
     pause(2)
     rosinit
@@ -69,8 +69,12 @@ counter = 1;
 robot_translation = [0, 0.28, -0.28];
 rot = rpy2tr(pi, 0, 0);
 robot_rotation = rot(1:3, 1:3);
-    
-objects = CameraGetCubes(robot_translation, robot_rotation);
+
+if simulationMode.Real
+    objects = CameraGetCubes(robot_translation, robot_rotation);
+else
+    objects = 0;
+end
 
 while programStop == false    
 
