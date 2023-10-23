@@ -8,8 +8,8 @@ L = log4matlab('Assignment2.log');
 %% Set mode: Simulation, Real, Both
 simulationMode = struct('Sim', false, 'Real', false);
 
-simulationMode.Sim = true;
-simulationMode.Real = false;
+simulationMode.Sim = false;
+simulationMode.Real = true;
 
 gripperMode = struct('DH', false, 'Model', false);
 
@@ -39,7 +39,7 @@ zGripperOffset = 0.06; % How far the block is from the end effector
 %Final place location of the blocks
 redBlockPos = transl(0,-0.25,0)*trotz(0);
 blueBlockPos = transl(0,0.25,0)*trotz(0);
-greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
+greenBlockPos = transl(0.1,-0.2,0)*trotz(0);
 
 
 %% Set up Estop and sensors
@@ -64,7 +64,10 @@ counter = 1;
 
 %Gets psotion of all cubes within camera frame
 
-robot_translation = [-0.012, 0.28, -0.27 + 0.043];
+home_origin_ee = r.model.fkine([0, 0, 0, 0, 0]);
+
+home_origin_ee.t
+robot_translation = home_origin_ee.t;
 rot = rpy2tr(pi, 0, 0);
 robot_rotation = rot(1:3, 1:3);
 
@@ -72,13 +75,14 @@ objects = 0;
 
 if simulationMode.Real
     
-    objects = CameraGetCubes(robot_translation, robot_rotation);
     ControlGripperRealRobot(true);
         % so it doesnt write it every scan
     first = true;
     held = false;
     lightCurtainSafe = true;
-    MoveRealRobot([-pi/4,pi/4,0,0],noEstop,arduinoPort, status, L,first,held,lightCurtainSafe,simulationMode);
+    MoveRealRobot([0,0,0,0],noEstop,arduinoPort, status, L,first,held,lightCurtainSafe,simulationMode);
+
+    objects = CameraGetCubes(robot_translation, robot_rotation);
 
 end
 
