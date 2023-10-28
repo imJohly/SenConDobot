@@ -21,13 +21,6 @@ else
 end
 
 % Estop Status variables
-Running = '1';
-Stopped = '0';
-Held = '2';
 status = struct('Running', '1', 'Stopped', '0', 'Held', '2');
-dataLength = 2;
-
-% Read data from the Arduino
-%sysStatus = read(arduinoPort, 2, "char");
 
 end

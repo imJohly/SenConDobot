@@ -43,7 +43,7 @@ greenBlockPos = transl(-0.15,-0.2,0)*trotz(0);
 
 
 %% Set up Estop and sensors
-[noEstop, status, arduinoPort] = EStopAndSensors('/dev/ttyACM0',L);
+[noEstop, status, arduinoPort] = EStopAndSensors('COM3',L);
 
 
 %% Simulation objects
