@@ -98,15 +98,12 @@ classdef CameraMan
                         classyPosition.col = check;
                         classyPosition.position = obj.convert2RobotFrame(thisTransform);
                         
-
                         positions = [positions; classyPosition];
                     end
                 end
             end
         end
-    end
 
-    methods (Access = private)
         function positions = colourDetect(obj, colToDetect, minArea)
             arguments
                 obj
@@ -142,10 +139,9 @@ classdef CameraMan
             % dilate region to merge noisy regions
             se = strel('square', 20);
             colourDilated = imdilate(colourMask, se);
-
+            
             % calculate colour regions
             colourRegions = regionprops(colourDilated, 'Area', 'Centroid', 'BoundingBox');
-            
             
             % loop through regions and keep regions greater than minimum area.
             centroids = [];
@@ -161,6 +157,9 @@ classdef CameraMan
 
             positions = centroids;
         end
+    end
+
+    methods (Access = private)
 
         function position = convert2RobotFrame(obj, rel_transform)
             % arguments
@@ -225,13 +224,15 @@ classdef CameraMan
             ix = pixelPosition(1);
             iy = pixelPosition(2);
 
+            plot(ix, iy, 'b.', 'MarkerSize', 10);
+
             % Grab depth value from pixel point
             depth = double(obj.depthImg(iy, ix));
-            
+    
             % Calculate the 3d relative position, scaled to metres
-            x = (ix - obj.intrinsics.PrincipalPoint(1)) * depth / obj.intrinsics.FocalLength(1) / 1000;
-            y = (iy - obj.intrinsics.PrincipalPoint(2)) * depth / obj.intrinsics.FocalLength(2) / 1000;
-            z = depth / 1000;
+            x = -((ix - obj.intrinsics.PrincipalPoint(1)) * depth / obj.intrinsics.FocalLength(1) / 1000);
+            y = -((iy - obj.intrinsics.PrincipalPoint(2)) * depth / obj.intrinsics.FocalLength(2) / 1000);
+            z = (depth) / 1000;
 
             position = [x, y, z];
         end
@@ -254,16 +255,16 @@ classdef CameraMan
             I = rgb2lab(RGB);
             
             % Define thresholds for channel 1 based on histogram settings
-            channel1Min = 1.623;
-            channel1Max = 75.853;
-            
+            channel1Min = 8.916;
+            channel1Max = 65.648;
+
             % Define thresholds for channel 2 based on histogram settings
-            channel2Min = 27.705;
-            channel2Max = 73.171;
-            
+            channel2Min = 39.752;
+            channel2Max = 56.857;
+
             % Define thresholds for channel 3 based on histogram settings
-            channel3Min = -36.452;
-            channel3Max = 36.236;
+            channel3Min = -40.210;
+            channel3Max = 51.393;
             
             % Create mask based on chosen histogram thresholds
             sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
@@ -295,16 +296,16 @@ classdef CameraMan
             I = rgb2lab(RGB);
             
             % Define thresholds for channel 1 based on histogram settings
-            channel1Min = 2.826;
-            channel1Max = 99.901;
-            
+            channel1Min = 8.916;
+            channel1Max = 65.648;
+
             % Define thresholds for channel 2 based on histogram settings
-            channel2Min = -57.712;
-            channel2Max = -17.433;
-            
+            channel2Min = -46.402;
+            channel2Max = -32.373;
+
             % Define thresholds for channel 3 based on histogram settings
-            channel3Min = -62.724;
-            channel3Max = 54.674;
+            channel3Min = -40.210;
+            channel3Max = 51.393;
             
             % Create mask based on chosen histogram thresholds
             sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
@@ -336,17 +337,17 @@ classdef CameraMan
             I = rgb2lab(RGB);
             
             % Define thresholds for channel 1 based on histogram settings
-            channel1Min = 1.623;
-            channel1Max = 98.770;
-            
+            channel1Min = 8.082;
+            channel1Max = 100.000;
+
             % Define thresholds for channel 2 based on histogram settings
-            channel2Min = -44.602;
-            channel2Max = 73.171;
-            
+            channel2Min = -47.674;
+            channel2Max = 79.252;
+
             % Define thresholds for channel 3 based on histogram settings
-            channel3Min = -36.452;
-            channel3Max = -19.149;
-            
+            channel3Min = -107.508;
+            channel3Max = -23.025;
+                    
             % Create mask based on chosen histogram thresholds
             sliderBW = (I(:,:,1) >= channel1Min ) & (I(:,:,1) <= channel1Max) & ...
                 (I(:,:,2) >= channel2Min ) & (I(:,:,2) <= channel2Max) & ...

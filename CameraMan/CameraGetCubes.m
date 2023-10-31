@@ -6,7 +6,7 @@ function [objects] = CameraGetCubes(robot_translation, robot_rotation)
     c = CameraMan(robot_translation, robot_rotation);
     
     % subscribers to camera topics
-    camInfoSub = rossubscriber("/camera/depth/camera_info", "sensor_msgs/CameraInfo");
+    camInfoSub = rossubscriber("/camera/aligned_depth_to_color/camera_info", "sensor_msgs/CameraInfo");
     colImgSub = rossubscriber("/camera/color/image_raw", "sensor_msgs/Image");
     depthImgSub = rossubscriber("/camera/aligned_depth_to_color/image_raw", "sensor_msgs/Image");
 
