@@ -4,6 +4,9 @@ classdef RealRobotMain < handle
 %#ok<*TRYNC>
 
     properties (Constant)
+        x_offset = 0            % Camera X Offset
+        y_offset = 0.01         % Camera Y Offset
+        z_offset = 0.003        % Camera Z Offset
     end
 
     methods
@@ -80,8 +83,6 @@ classdef RealRobotMain < handle
             %% Create point cloud for test point function
             [pointCloud,shp] = DoBotVolume(r,false,false,false);
             
-            %%
-            
             blockInformation = zeros(100,9); %Can store up to 100 unique blocks at once, increase this number if needed
             %blockInformation = [block_no.,block_colour, x_start, y_start, z_start, z_rot_start, x_end, y_end, z_end, z_rot_end]
             %^ Shows what values are stored in each row from 1 to 9.
@@ -90,19 +91,22 @@ classdef RealRobotMain < handle
             programStop = false;
             counter = 1;
             
-            %Gets psotion of all cubes within camera frame
-            
-            robot_translation = [0, 0.28, -0.28];
-            rot = rpy2tr(pi, 0, 0);
-            robot_rotation = rot(1:3, 1:3);
-            
             if simulationMode.Real
-                objects = CameraGetCubes(robot_translation, robot_rotation);  
                 ControlGripperRealRobot(true); % so it doesnt write it every scan
                 first = true;
                 held = false;
                 lightCurtainSafe = true;
+                
+                % Move end effector to the correct position for camera
                 MoveRealRobot([-pi/4,pi/4,0,0],noEstop,arduinoPort, status, L,first,held,lightCurtainSafe,simulationMode);
+                
+                % Gets position of all cubes within camera frame (adjust offsets here)
+                robot_translation = [-0.027 + x_offset, -0.285 + y_offset, 0.23 + z_offset];
+                rot = eye(4);
+                robot_rotation = rot(1:3, 1:3);
+                
+                % Detect objects after camera is moved into correct position
+                objects = CameraGetCubes(robot_translation, robot_rotation);  
             else
                 objects = 0;
             end
