@@ -38,7 +38,7 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 
 Aidan Korpar - 14251971 - aidan.j.korpar@student.uts.edu.au
 
-Connor Fitzgibbon - SID - email
+Connor Fitzgibbon - SID 14272165 - connor.k.fitzgibbon@student.uts.edu.au
 
 Johnson Ly - SID 14172391 - johnson.ly@student.uts.edu.au
 
