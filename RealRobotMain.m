@@ -29,7 +29,7 @@ classdef RealRobotMain < handle
         function Main()
         
             %% Set Up Logging
-            L = log4matlab('Assignment2.log');
+            L = log4matlab('DoBotProjectLog.log');
             
             %% Set mode: Simulation, Real, Both
             simulationMode = struct('Sim', false, 'Real', false);
@@ -123,7 +123,7 @@ classdef RealRobotMain < handle
             
             end
             %% edit logging file
-            edit('Assignment2.log');
+            edit('DoBotProjectLog.log');
 
         end
     
