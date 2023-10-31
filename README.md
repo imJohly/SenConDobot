@@ -10,12 +10,8 @@ This repo contains the Sorting Dobot project where a Dobot and a RGBD Camera is 
 
 _This project was worked on as a part of UTS 41014 Sensors and Control - Dobot Project._
 
-### Motivation
-
-### Features
-
-
 ## Getting Started
+
 To connect and set up the DoBot follow the steps here https://github.com/gapaul/dobot_magician_driver/wiki
 
 To launch the DoBot drivers use the following command:
@@ -38,8 +34,8 @@ Distributed under the Apache 2.0 License. See `LICENSE.txt` for more information
 
 Aidan Korpar - 14251971 - aidan.j.korpar@student.uts.edu.au
 
-Connor Fitzgibbon - SID 14272165 - connor.k.fitzgibbon@student.uts.edu.au
+Connor Fitzgibbon - 14272165 - connor.k.fitzgibbon@student.uts.edu.au
 
-Johnson Ly - SID 14172391 - johnson.ly@student.uts.edu.au
+Johnson Ly - 14172391 - johnson.ly@student.uts.edu.au
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
