@@ -4,4 +4,6 @@ function [] = EStopRealRobot()
 [safetyStatePublisher,safetyStateMsg] = rospublisher('/dobot_magician/target_safety_status');
 safetyStateMsg.Data = 3;
 send(safetyStatePublisher,safetyStateMsg);
+disp('Software Estop Sent To Robot')
+pause(2)
 end

@@ -13,25 +13,7 @@ targetJointTrajMsg.Points = trajectoryPoint;
 % Send joint message
 send(targetJointTrajPub,targetJointTrajMsg);
 
-%% Currently works
-%check e stop status.
-% if ~noEstop
-%     ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
-% end
-% 
-% %wait 1 second for robot to get to destination
-% pause(1)
-% 
-% qnew = GetJointStatesRealRobot();
-% %if the goal q's do not equal current position then you are not at the goal
-% % check to see the estop status
-% if ~(qValues == qnew)
-%     if ~noEstop
-%         ReadArduino(arduinoPort, status, loggerFile,first,held,lightCurtainSafe,simulationMode)
-%     end
-% 
-%     pause(2) % shouldnt need this pause anymore
-% end
+
 %% What i think it should be
 %check e stop status.
 if ~noEstop
